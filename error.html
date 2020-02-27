@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Launcher RCH</title>
+    <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <script src="./front.js" defer></script>
+    <style>
+      body {
+        background-color: #2C5FB3;
+        text-align: center;
+      }
+      #close{
+        color:  #C6E7FE;
+        opacity: 0.7;
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 18px;
+        text-decoration: none;
+
+      }
+      #titulo{
+        color: white;
+      }
+      #subtitulo{
+        color: white;
+        padding: 0;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+      
+    </style>
+  </head>
+  <body>
+    <h1 id="titulo">Sistema Ramon Chozas</h1>
+    <h3 id="subtitulo">ERRORRRRRRRRRRRRRRRRRRRRRRRRRRRRRR.</h3>
+    <a href="javascript:window.close()" id="close">Cerrar Launcher</a>
+  </body>
+</html>
