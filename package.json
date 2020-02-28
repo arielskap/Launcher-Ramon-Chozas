@@ -14,6 +14,8 @@
     "tailwindcss": "^1.2.0"
   },
   "devDependencies": {
+    "electron": "^8.0.0",
+    "electron-reload": "^1.5.0",
     "@babel/core": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
@@ -44,7 +46,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --open --mode development"
+    "start": "webpack-dev-server --open --mode development",
+    "start e": "electron ."
   },
   "repository": {
     "type": "git",
