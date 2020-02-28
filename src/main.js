@@ -1,34 +1,32 @@
-const { app, BrowserWindow,remote,ipcMain } = require('electron');
+const { app, BrowserWindow,ipcMain } = require('electron');
 const fs = require("fs");
-const http = require("http");
 const crypto = require("crypto");
 const child = require('child_process');
+const event_listen = require('./main-process/event_listen.js');
 
 let win
-const __LIST_APP_RUN__ = {}
 
-function createWindow () {
+app.allowRendererProcessReuse = true;
+app.whenReady().then(()=>{
   win = new BrowserWindow({
-      width: 900,
-      height: 600,
+      width: 1280,
+      height: 800,
       frame : false,
-
       title : "Launcher Ramon Chozas",
       webPreferences: {
       nodeIntegration: true
       }
-  })  
-  //win.webContents.openDevTools();
+  })
 
-  win.loadFile("dist/index.html")
+  process.env.NODE_ENV === "dev" && win.webContents.openDevTools();
+  process.env.NODE_ENV === "dev" ? win.loadFile("dev_index.html") : win.loadFile("dist/index.html");
 
   win.on("closed",()=>{
       win = null;
   })
-}
+});
 
-app.allowRendererProcessReuse = true;
-app.on('ready', createWindow)
+/*
 
 ipcMain.on("login-launcher",(event,args_JSON)=>{
 
@@ -71,8 +69,9 @@ ipcMain.on("login-launcher",(event,args_JSON)=>{
     req.end();
 });
 
+
 ipcMain.on("logout-launcher",(event,args_JSON)=>{
-  win.loadFile("index.html")
+
 });
 
 ipcMain.on('open-app', (event, args_JSON) => {
@@ -99,10 +98,7 @@ ipcMain.on('open-app', (event, args_JSON) => {
   return event.reply('reply-open-app', {code : 200,message : "app_opened" }); 
 });
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-
+*/
 /*
 obtieneVersionLocal((local)=>{
   obtieneVersionDelServidor((servidor,dependencias)=>{

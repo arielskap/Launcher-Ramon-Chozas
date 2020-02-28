@@ -1,0 +1,22 @@
+{
+    "sistema_chozas" : {
+        "app_name" : "sistema_chozas",
+        "app_path": "C:/chozassa_v2/chozassa_v2.exe"
+    },
+    "hoja_de_ruta" : {
+        "app_name" : "hoja_de_ruta",
+        "app_path" : "C:/hr2019/HR2019.exe" 
+    },
+    "tintas" : {
+        "app_name" : "tintas",
+        "app_path" : "C:/hr2019/HR2019.exe"
+    },
+    "partes" : {
+        "app_name" : "partes",
+        "app_path" : "C:/partes/partes.exe"   
+    },
+    "manten" : {
+        "app_name" : "mantenimiento",
+        "app_path" : "C:/manten/Manten.exe"
+    }
+}

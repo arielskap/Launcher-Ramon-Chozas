@@ -1,14 +1,14 @@
 {
   "name": "desktop-launcher-rchozas",
   "version": "1.0.0",
-  "description": "Launcher de Sistema Chozas",
+  "description": "Launcher de Ramon Chozas SA",
   "main": "main.js",
   "scripts": {
-    "start": "electron .",
-    "dev": "nodemon ."
+    "dev": "env NODE_ENV=dev electron src/main.js",
+    "prod": "env NODE_ENV=pro electron dist/main.js"
   },
-  "author": "Abbul Rodriguez",
-  "license": "MIT",
+  "author": "Ramon Chozas SA",
+  "license": "ISC",
   "devDependencies": {
     "electron": "^8.0.0",
     "electron-reload": "^1.5.0"
