@@ -5,8 +5,7 @@ const crypto = require("crypto");
 const child = require('child_process');
 
 let win
-const __SISTEMA_CHOZAS__ = "C:/chozassa_v2/chozassa_v2.exe";
-const ___MANTEN___ = "C:/Manten/manten.exe";
+const __LIST_APP_RUN__ = {}
 
 function createWindow () {
   win = new BrowserWindow({
@@ -19,9 +18,9 @@ function createWindow () {
       nodeIntegration: true
       }
   })  
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
-  win.loadFile("index.html")
+  win.loadFile("dist/index.html")
 
   win.on("closed",()=>{
       win = null;
@@ -49,23 +48,24 @@ ipcMain.on("login-launcher",(event,args_JSON)=>{
         res.on('end', () => {
         try {
             const parsedData = JSON.parse(data_ws);
-            if (parsedData.hash === "a8d95e78f748109d83fe082151381f") {
-              event.reply('reply-login-launcher', data_ws);  
-              return 1; 
+
+            if(parsedData.code !== 200){
+              event.reply('reply-login-launcher', {code : parsedData.code, message : parsedData.message });
             }
 
-            win.loadFile("home.html")
+            __LIST_APP_RUN__ = data_ws.message;
+            event.reply('reply-login-launcher', {code : parsedData.code, message : parsedData.message });
             
         } catch (e) {
-            console.error(`ERROR= 
-            ${e.message}`);
+            console.error(`ERROR JSON= ${e.message}`);
+            return event.reply('reply-login-launcher', {code : 500,message : "error_parse_json" }); 
         }
         });
     });
     
     req.on('error', (e) => {
-        console.error(`problem with request: 
-        ${e.message}`);
+        console.error(`ERROR REQUEST: ${e.message}`);
+        return event.reply('reply-login-launcher', {code : 500,message : "error_server" }); 
     });
     
     req.end();
@@ -73,13 +73,15 @@ ipcMain.on("login-launcher",(event,args_JSON)=>{
 
 ipcMain.on("logout-launcher",(event,args_JSON)=>{
   win.loadFile("index.html")
-})
+});
 
 ipcMain.on('open-app', (event, args_JSON) => {
 
-  const ls = child.spawn(args_JSON.app_path);
+  if (__LIST_APP_RUN__.find(args_JSON.sistema_chozas) !== null){
+    return event.reply('reply-open-app', {code : 400,message : "app_in_use" }); 
+  }
 
-  args_JSON.error = null;
+  const ls = child.spawn(args_JSON.app_path);
 
   ls.stdout.on('data', (data) => {
     console.log(`stdout: ${data}`);
@@ -90,11 +92,11 @@ ipcMain.on('open-app', (event, args_JSON) => {
   });
 
   ls.on('close', (code) => {
-    event.reply('reply-close-app', args_JSON); 
+    return event.reply('reply-close-app', {code : 200,message : "app_close" }); 
   });
 
-  event.reply('reply-open-app', args_JSON);  
-  
+  __LIST_APP_RUN__.push(args_JSON.app_name);
+  return event.reply('reply-open-app', {code : 200,message : "app_opened" }); 
 });
 
 // This method will be called when Electron has finished

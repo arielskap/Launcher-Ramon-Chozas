@@ -1,39 +1,39 @@
 const child = require('child_process');
 
- function ejecutaAPP (ruta_exe,name_app) {
-        child.execFile(ruta_exe, function(err) {
-            if(err){
-                console.log(err)
-                return {app : name_app, action : "ejecutar_APP", error : err.toString()};
-            }
+function ejecutaAPP (ruta_exe,name_app) {
+    child.execFile(ruta_exe, function(err) {
+        if(err){
+            console.log(err)
+            return {app : name_app, action : "ejecutar_APP", error : err.toString()};
+        }
 
-            return 0
-        });
-    }
-    
-    function obtieneVersionDelServidorAPP (callback){
-let data_ws=''
-const options = {
-    hostname: 'www.dynamicdoc.com.ar',
-    path: '/node/build/validVersion/hash',
-    method: 'GET',
-    headers: {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    }
-};
-
-const req = http.request(options, (res) => {
-    res.setEncoding('utf8');
-    res.on('data', (chunk) => data_ws+= chunk);
-    res.on('end', () => {
-    try {
-        const parsedData = JSON.parse(data_ws);
-        callback(parsedData.hash,parsedData.all_dependencies);
-    } catch (e) {
-        console.error(`ERROR= 
-        ${e.message}`);
-    }
+        return 0
     });
+}
+
+function obtieneVersionDelServidorAPP (callback){
+    let data_ws=''
+    const options = {
+        hostname: 'www.dynamicdoc.com.ar',
+        path: '/node/build/validVersion/hash',
+        method: 'GET',
+        headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        }
+    };
+
+    const req = http.request(options, (res) => {
+        res.setEncoding('utf8');
+        res.on('data', (chunk) => data_ws+= chunk);
+        res.on('end', () => {
+        try {
+            const parsedData = JSON.parse(data_ws);
+            callback(parsedData.hash,parsedData.all_dependencies);
+        } catch (e) {
+            console.error(`ERROR= 
+            ${e.message}`);
+        }
+        });
 });
 
 req.on('error', (e) => {
@@ -47,18 +47,18 @@ req.end();
 
 function obtieneVersionLocalAPP (callback) {
     
-new Promise((resolve, reject) => {
-    const hash = crypto.createHash("md5");
-    const stream = fs.createReadStream(__SISTEMA_CHOZAS__);
-    stream.on("error", err => reject(err));
-    stream.on("data", chunk =>  hash.update(chunk));
-    stream.on("end", () => resolve(hash.digest("hex")));
-})
-.then(hex => {
-    callback(hex)
-}).catch(err => {
-    console.error(err)
-})
+    new Promise((resolve, reject) => {
+        const hash = crypto.createHash("md5");
+        const stream = fs.createReadStream(__SISTEMA_CHOZAS__);
+        stream.on("error", err => reject(err));
+        stream.on("data", chunk =>  hash.update(chunk));
+        stream.on("end", () => resolve(hash.digest("hex")));
+    })
+    .then(hex => {
+        callback(hex)
+    }).catch(err => {
+        console.error(err)
+    })
 }
 
 function actualizaAPP(dependencias,name_app) {
