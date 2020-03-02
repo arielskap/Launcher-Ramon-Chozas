@@ -1,0 +1,10 @@
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+body{
+    background: linear-gradient(to right, #2c5fb3, #299ec9, white, white);
+    background-size: 400% 400%;
+}
