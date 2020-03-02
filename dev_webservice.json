@@ -1,0 +1,50 @@
+{
+  "CODE_200": [
+    {
+      "code": 200,
+      "nombre": "Agustin",
+      "apellido" : "Barrientos",
+      "message": "logged",
+      "token" : "asdasdsdgfdsfd",
+      "list_app": [
+          "sistema_chozas",
+          "hoja_de_ruta"
+      ]
+    },
+    {
+      "code": 200,
+      "nombre": "Ariel",
+      "apellido" : "Villareal",
+      "message": "logged",
+      "token" : "asdasdsdgfdsfd",
+      "list_app": [
+          "sistema_chozas",
+          "hoja_de_ruta",
+          "tintas",
+          "partes"
+      ]
+    },
+    {
+      "code": 200,
+      "nombre": "Enrique",
+      "apellido" : "Bomberman",
+      "message": "password_expired"
+    }
+  ],
+  "CODE_400": [
+    {
+      "code": 400,
+      "message": "user_incorrect"
+    },
+    {
+      "code": 400,
+      "message": "password_incorrect"
+    }
+  ],
+  "CODE_500": [
+      {
+          "code": 500,
+          "message": "error_db"
+      }
+  ]
+}

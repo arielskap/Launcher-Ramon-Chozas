@@ -2,7 +2,11 @@ const { ipcMain } = require('electron');
 const http = require("http");
 const os = require('os');
 const list_app = require('./list_app.json');
-const __LIST_APP_RUN__ = {}
+let __LIST_APP_RUN__ = {}
+const __HOSTNAME__ =  "www.dynamicdoc.com.ar";
+const __PATH_LOGIN__ = "/node/build/login"
+const querystring = require('querystring');
+
 
 /**
  * Hace el REQUEST para el LOGIN.
@@ -10,43 +14,45 @@ const __LIST_APP_RUN__ = {}
  */
 ipcMain.on("login-launcher",(event,args_JSON)=>{
 
-    if (!args_JSON.username || args_JSON.username === undefined || !args_JSON.password || args_JSON.password === undefined ) {
-        return event.reply('reply-login-launcher', {code : 400,message : "error_in_credentials" }); 
+    if (!args_JSON.userName || args_JSON.userName === undefined || !args_JSON.password || args_JSON.password === undefined ) {
+        return event.reply('reply-login-launcher', {code : 400,message : "parameters 'userName' or 'password' no found" }); 
     }
+
+    const postData = querystring.stringify({
+            userName : args_JSON.userName,
+            password : args_JSON.password,
+            user_windows : os.userInfo().username,
+        });
 
     let data_ws=''
       const options = {
-          hostname: 'www.dynamicdoc.com.ar',
-          path: '/node/build/validVersion/hash',
+          hostname: __HOSTNAME__,
+          path: __PATH_LOGIN__,
           method: 'POST',
-          data : {
-              username : args_JSON.username,
-              password : args_JSON.password,
-              user_windows : os.userInfo().username
-          },
           headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': postData.length,
           }
       };
-      
+    
       const req = http.request(options, (res) => {
           res.setEncoding('utf8');
           res.on('data', (chunk) => data_ws+= chunk);
           res.on('end', () => {
-          try {
-              const parsedData = JSON.parse(data_ws);
-  
-              if(parsedData.code !== 200){
+            try {
+                let parsedData = JSON.parse(data_ws);
+                
+                if(parsedData.code !== 200){
+                    return event.reply('reply-login-launcher', {code : parsedData.code, message : parsedData.message  });
+                }
+    
+                __LIST_APP_RUN__ = data_ws.message;
                 event.reply('reply-login-launcher', {code : parsedData.code, message : parsedData.message });
-              }
-  
-              __LIST_APP_RUN__ = data_ws.message;
-              event.reply('reply-login-launcher', {code : parsedData.code, message : parsedData.message });
-              
-          } catch (e) {
-              console.error(`ERROR JSON= ${e.message}`);
-              return event.reply('reply-login-launcher', {code : 500,message : "error_parse_json" }); 
-          }
+                
+            } catch (e) {
+                console.error(`ERROR JSON= ${e.message}`);
+                return event.reply('reply-login-launcher', {code : 500,message : "error_parse_json" }); 
+            }
           });
       });
       
@@ -55,10 +61,10 @@ ipcMain.on("login-launcher",(event,args_JSON)=>{
           return event.reply('reply-login-launcher', {code : 500,message : "error_server" }); 
       });
       
+      req.write(postData);
       req.end();
 });
   
-
 /**
  * Escucha el evento para ABRIR una APP
  */
@@ -85,4 +91,3 @@ ipcMain.on('open-app', (event, args_JSON) => {
     __LIST_APP_RUN__.push(args_JSON.app_name);
     return event.reply('reply-open-app', {code : 200,message : "app_opened" }); 
 });
-

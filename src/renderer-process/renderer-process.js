@@ -1,11 +1,16 @@
 const {ipcRenderer} = require('electron')
 
+
+function login (){
+    ipcRenderer.send('login-launcher',{userName : input_userName.value,password : input_password.value })
+}
+
 function openAPP (btn_element){  
     ipcRenderer.send('open-app',btn_element.id)
 }
 
-function login (){
-    ipcRenderer.send('login-launcher',{username : input_username.value,password : input_password.value })
+function logout() {
+    console.table("CERRO SESION");
 }
 
 ipcRenderer.on('reply-open-app',  (event, args_JSON) => {    
