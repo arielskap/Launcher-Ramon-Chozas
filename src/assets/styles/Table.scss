@@ -1,0 +1,29 @@
+.separator {
+    width: 100%;
+    border: 0;
+    height: 2px;
+    background-image: linear-gradient(to left, rgb(70, 218, 168), white,yellow,white, rgb(70, 218, 168))   ;
+    background-image: -webkit-linear-gradient(to left, rgb(70, 218, 168), white,yellow,white, rgb(70, 218, 168));
+    background-image: -moz-linear-gradient(to left, rgb(70, 218, 168), white,yellow,white, rgb(70, 218, 168));
+    background-image: -ms-linear-gradient(to left, rgb(70, 218, 168), white,yellow,white, rgb(70, 218, 168));
+    background-image: -o-linear-gradient(to left, rgb(70, 218, 168), white,yellow,white, rgb(70, 218, 168));
+}
+
+/*hr {
+    border: 0;
+    margin: 1.35em auto;
+    max-width: 100%;
+    background-position: 50%;
+    box-sizing: border-box;
+}
+
+.fade-2 {
+    border-width: 0 0 1px;
+    $color: white;
+    color: $color;
+    border-image: linear-gradient(90deg,
+            rgba($color, 0),
+            rgba($color, 1) 50%,
+            rgba($color, 0) 100%) 0 0 100%;
+    border-style: solid;
+}*/
