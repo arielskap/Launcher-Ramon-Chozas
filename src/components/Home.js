@@ -27,16 +27,16 @@ class Home extends React.Component {
                     <div className='p-5' id='imgChozas'>
                         <img className='w-full' src={Logo} alt='Logo' />
                     </div>
-                <div>
-                    <h1 className='text-center text-white pb-4'>
-                        Ramón Chozas S.A
-                    </h1>
-                </div>
-                <div className='text-center'>
-                    <Link to='/home/login'  class="bg-teal-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                        ¡Acceder!
-                    </Link>
-                </div>
+                    <div>
+                        <h1 className='text-center text-white pb-4'>
+                            Ramón Chozas S.A
+                        </h1>
+                    </div>
+                    <div className='text-center'>
+                        <Link to='/login'  className="bg-teal-400 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
+                            ¡Acceder!
+                        </Link>
+                    </div>
                 </div>
         </main>
     );

@@ -1,68 +1,29 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[] Transparencia login
+[] Poner el login dentro del home
+[] Eliminar Header de Login
+[] Boton de "iniciar sesion" a la derecha
+[] Poner ingrese contraseña y usuario en color normal, y si el usuario pone mal los datos, o no los pone, se pone en rojo.
 
-## Available Scripts
+Cosas que hice: 
+Te agregue un archivo llamado ".eslintrc" este archivo lo que hace es asignar reglas "ortograficas" al codigo. Tambien lo agrege al npm así que recorda hacer "npm i" para que te instale el paquete de las reglas.
+Vas a ver que ahora tu codigo esta como todo en "rojo" jajajja no te asustes es simplemente cosas boludas que te dice de mojorar. Cuando pongas el mouse encima de estos errores te va a salir un mensajito diciendo cual es el problema, y vas a ver un botoncito en esos mensajitos que dice "quick fix..." si lo apretas te soluciona la mayoria, los que no te soluciones fijate si podes arreglarlos, te da documentacion y todo a lo que se refiere el error y como solucionarlo.
 
-In the project directory, you can run:
+Despues con respecto a la "transparencia login" lo que te digo es simplemente que el fondo del login (el recuadro blanco) tenga apenas un toquesito de transparencia
 
-### `npm start`
+Lo de "Poner el login dentro del home" era lo que te habia dicho antes, saca el boton acceder y ahí mas o menos (levantando un toque el icono de ramon chozas) iría el login
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Y bueno por ende el header del login no iría ya que ya aparece el icono en el Home.
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Lo de la animacion del fondo, quedate tranqui que yo me encargo!
 
-### `npm test`
+Y bueno eso, avisame despues que onda :D !
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+        .
+       ,O,
+      ,OOO,
+'oooooOOOOOooooo'
+  'OOOOOOOOOOO'
+    'OOOOOOO'
+    OOOO'OOOO
+   OOO'   'OOO
+  O'         'O
