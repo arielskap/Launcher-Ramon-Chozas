@@ -1,21 +1,19 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import '../assets/styles/Modal.scss';
 
-const Modal = ({ title, chidlren }) => {
-  return (
-    <div className='absolute top-0 left-0 h-screen w-screen'>
-      <div>
-        <div>
-          <h3>{title}</h3>
-        </div>
-        <div>
-          <p>{chidlren}</p>
-        </div>
-        <div>
-          <button type='button'>Cancelar</button>
-          <button type='button'>Confirmar</button>
-        </div>
+const Modal = ({ children, isOpen, onClose }) => {
+  if (!isOpen) {
+    return null;
+  }
+  return ReactDOM.createPortal(
+    <div className='Modal animated fadeIn faster'>
+      <div className='Modal__container animated slideInDown faster'>
+        <button className='Modal__close-button' type='button' onClick={onClose}><b>X</b></button>
+        {children}
       </div>
-    </div>
+    </div>,
+    document.getElementById('modal'),
   );
 };
 

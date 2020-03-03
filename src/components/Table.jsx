@@ -8,7 +8,7 @@ import third from '../assets/static/3.png';
 const Table = () => {
   useEffect(() => {
     document.querySelector('.div_table').scrollTo(0, document.body.scrollHeight);
-  });
+  }, []);
   return (
     <div className='p-4 border-2 border-teal-500 shadow-2xl max-h-full div_table overflow-auto'>
       <Card title='BIENVENIDA' img={third} imgAlt='Ariel Villarreal' time='10:21 07/01/2019' />

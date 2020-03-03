@@ -2,7 +2,7 @@ import React from 'react';
 
 const Card = ({ title, img, imgAlt, children, time }) => {
   return (
-    <div className='my-4'>
+    <div>
       <div className='mb-2 text-lg font-semibold text-center'>
         <h2>{title}</h2>
       </div>

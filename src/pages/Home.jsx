@@ -1,11 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ButtonMenu from '../components/ButtonMenu';
+import TableCarousel from '../components/TableCarousel';
+import ExitModal from '../components/ExitModal';
 import '../assets/styles/Home.scss';
 import logoChozas from '../assets/static/logo_chozas2.png';
 import imgPerfil from '../assets/static/thrall.jpg';
-import Table from '../components/Table';
 
 const Home = () => {
+  const [modalExitIsOpen, setModalExitIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const handleCloseModal = () => {
+    setModalExitIsOpen(false);
+    setModalIsOpen(false);
+  };
+
+  const handleOpenModalExit = () => {
+    setModalExitIsOpen(true);
+  };
+
+  const handleOpenModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const handleCloseApp = () => {
+    alert('se cerro (?');
+  };
+
+  const handleLogOut = () => {
+    alert('cerro sesion');
+  };
+
   return (
     <section className='Home p-4 h-full w-full flex flex-col animated fadeIn'>
       <div className='Home__header flex items-center justify-between'>
@@ -32,11 +57,18 @@ const Home = () => {
               <ButtonMenu>Mantenimiento</ButtonMenu>
               <ButtonMenu>Partes</ButtonMenu>
             </div>
-            <div className='flex justify-center'>
-              <button type='button' className='bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-8 border border-teal-700 rounded'>Salir</button>
+            <div className='flex justify-around'>
+              <div>
+                <button onClick={handleOpenModal} type='button' className='bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-8 border border-teal-700 rounded'>Cerrar Sesión</button>
+                <ExitModal isOpen={modalIsOpen} onCloseModal={handleCloseModal} onConfirm={handleLogOut}>¿Seguro/a que quieres cerrar sesión?</ExitModal>
+              </div>
+              <div>
+                <button onClick={handleOpenModalExit} type='button' className='bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-8 border border-red-700 rounded'>Salir</button>
+                <ExitModal isOpen={modalExitIsOpen} onCloseModal={handleCloseModal} onConfirm={handleCloseApp}>¿Seguro/a que quieres salir?</ExitModal>
+              </div>
             </div>
           </div>
-          <Table />
+          <TableCarousel />
         </div>
       </div>
     </section>
