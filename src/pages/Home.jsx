@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import ButtonMenu from '../components/ButtonMenu';
 import TableCarousel from '../components/TableCarousel';
 import ExitModal from '../components/ExitModal';
+import { logout, openAPP } from '../renderer-process';
 import '../assets/styles/Home.scss';
 import logoChozas from '../assets/static/logo_chozas2.png';
 import imgPerfil from '../assets/static/thrall.jpg';
@@ -24,11 +25,11 @@ const Home = () => {
   };
 
   const handleCloseApp = () => {
-    alert('se cerro (?');
+    window.close();
   };
 
   const handleLogOut = () => {
-    alert('cerro sesion');
+    logout();
   };
 
   return (
@@ -53,7 +54,18 @@ const Home = () => {
         <div className='grid grid-cols-2 gap-4 div_menu pt-6'>
           <div className='flex flex-col justify-between text-xl'>
             <div className='flex justify-center flex-col px-12'>
-              <ButtonMenu>Ramon Chozas SA</ButtonMenu>
+              <ButtonMenu onClick={() => {
+                openAPP('sistema_chozas');
+              }}
+              >
+                Ramon Chozas SA
+              </ButtonMenu>
+              <ButtonMenu onClick={() => {
+                openAPP('hoja_de_ruta');
+              }}
+              >
+                Hoja de Ruta
+              </ButtonMenu>
               <ButtonMenu>Mantenimiento</ButtonMenu>
               <ButtonMenu>Partes</ButtonMenu>
             </div>
