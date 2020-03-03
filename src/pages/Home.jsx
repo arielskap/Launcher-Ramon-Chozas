@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ButtonMenu from '../components/ButtonMenu';
 import TableCarousel from '../components/TableCarousel';
 import ExitModal from '../components/ExitModal';
-import { logout, openAPP } from '../renderer-process';
+//import { logout, openAPP } from '../renderer-process';
 import '../assets/styles/Home.scss';
 import logoChozas from '../assets/static/logo_chozas2.png';
 import imgPerfil from '../assets/static/thrall.jpg';
@@ -29,7 +29,8 @@ const Home = () => {
   };
 
   const handleLogOut = () => {
-    logout();
+    //logout();
+    alert('Cerro sesion');
   };
 
   return (
@@ -55,13 +56,13 @@ const Home = () => {
           <div className='flex flex-col justify-between text-xl'>
             <div className='flex justify-center flex-col px-12'>
               <ButtonMenu onClick={() => {
-                openAPP('sistema_chozas');
+                //openAPP('sistema_chozas');
               }}
               >
                 Ramon Chozas SA
               </ButtonMenu>
               <ButtonMenu onClick={() => {
-                openAPP('hoja_de_ruta');
+                //openAPP('hoja_de_ruta');
               }}
               >
                 Hoja de Ruta
