@@ -17,24 +17,34 @@ class Login extends React.Component {
     this.setState({ [nam]: val });
   }
 
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { username, contraseña } = this.state;
+    if (username === '') {
+      document.querySelector('#username').classList.add('border-red-500');
+    }
+    if (contraseña === '') {
+      document.querySelector('#password').classList.add('border-red-500');
+    }
+  }
+
   render() {
     let aviso1 = '';
     let aviso2 = '';
-    if (!this.state.username) {
-      aviso1 = (
-        <p>Ingrese el usuario</p>
-      );
+    const { username, contraseña } = this.state;
+    if (!username) {
+      aviso1 = 'Ingrese el usuario';
     } else {
       aviso1 = '';
     }
-    if (!this.state.contraseña) {
-      aviso2 = (<p>Ingrese su contraseña</p>);
+    if (!contraseña) {
+      aviso2 = 'Ingrese su contraseña';
     } else {
       aviso2 = '';
     }
 
     return (
-      <form className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
+      <form className='Login shadow-md rounded px-8 pt-6 pb-8 mb-4' onSubmit={(this.handleSubmit)}>
         <div className='mb-4'>
           <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='username'>
             Usuario

@@ -11,13 +11,8 @@ class Home extends React.Component {
     return (
       <main className='w-screen h-screen'>
         <div id='inicio'>
-          <div className='p-5' id='imgChozas'>
-            <img className='w-full' src={Logo} alt='Logo' />
-          </div>
-          <div>
-            <h1 className='text-center text-white pb-4'>
-              Ramón Chozas S.A
-            </h1>
+          <div className='p-5 h-48' id='imgChozas'>
+            <img className='object-contain h-full w-full' src={Logo} alt='Logo' />
           </div>
           <div className='text-center'>
             <Login />
