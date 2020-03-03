@@ -9,7 +9,6 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
-    "smoothscroll-polyfill": "^0.4.4",
     "swiper": "^5.3.6",
     "tailwindcss": "^1.2.0"
   },

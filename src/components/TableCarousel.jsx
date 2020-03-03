@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import Swiper from 'swiper';
 import Card from './Card';
 import '../assets/styles/TableCarousel.scss';
+import json from '../jsons/table.json';
 import first from '../assets/static/1.png';
 import second from '../assets/static/2.png';
 import third from '../assets/static/3.png';
@@ -33,27 +34,29 @@ const TableCarousel = () => {
     });
   }, []);
   return (
-    <div className='div_table'>
+    <div className='div_table border-2 border-teal-500 shadow-2xl'>
       <div className='swiper-container'>
         <div className='swiper-wrapper'>
-          <div className='swiper-slide p-12'>
-            <Card title='BIENVENIDA' img={third} imgAlt='Ariel Villarreal' time='10:21 07/01/2019' />
-          </div>
-          <div className='swiper-slide p-12'>
-            <Card title='FELIZ CUMPLEAÑOS' img={second} imgAlt='Magdalena Pujato' time='12:17 17/10/2019' />
-          </div>
-          <div className='swiper-slide p-12'>
-            <Card title='BIENVENIDA' img={first} imgAlt='María Luján Araneo' time='09:39 02/03/2020' />
-          </div>
-          <div className='swiper-slide p-12'>
-            <Card title='BIENVENIDA' img={third} imgAlt='Ariel Villarreal' time='10:21 07/01/2019' />
-          </div>
-          <div className='swiper-slide p-12'>
-            <Card title='FELIZ CUMPLEAÑOS' img={second} imgAlt='Magdalena Pujato' time='12:17 17/10/2019' />
-          </div>
-          <div className='swiper-slide p-12'>
-            <Card title='BIENVENIDA' img={first} imgAlt='María Luján Araneo' time='09:39 02/03/2020' />
-          </div>
+          {json.map((element) => {
+            const { id, title, imgAlt, time } = element;
+            let { img } = element;
+            switch (img) {
+              case 1:
+                img = first;
+                break;
+              case 2:
+                img = second;
+                break;
+              case 3:
+                img = third;
+                break;
+            }
+            return (
+              <div className='swiper-slide p-12' key={id}>
+                <Card title={title} img={img} imgAlt={imgAlt} time={time} />
+              </div>
+            );
+          })}
         </div>
 
         <div className='swiper-button-next' />
