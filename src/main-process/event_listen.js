@@ -1,12 +1,12 @@
 const { ipcMain } = require('electron');
 const http = require("http");
 const os = require('os');
-const list_app = require('./list_app.json');
-let __LIST_APP_RUN__ = {}
-const __HOSTNAME__ =  "www.dynamicdoc.com.ar";
-const __PATH_LOGIN__ = "/node/build/login"
+const child = require('child_process');
 const querystring = require('querystring');
-
+const _LIST_APP_ = require('./list_app.json');
+let _LIST_APP_FOR_USER = []
+const _HOSTNAME_ =  "www.dynamicdoc.com.ar";
+const _PATH_LOGIN_ = "/node/build/login"
 
 /**
  * Hace el REQUEST para el LOGIN.
@@ -26,8 +26,8 @@ ipcMain.on("login-launcher",(event,args_JSON)=>{
 
     let data_ws=''
       const options = {
-          hostname: __HOSTNAME__,
-          path: __PATH_LOGIN__,
+          hostname: _HOSTNAME_,
+          path: _PATH_LOGIN_,
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -42,12 +42,17 @@ ipcMain.on("login-launcher",(event,args_JSON)=>{
             try {
                 let parsedData = JSON.parse(data_ws);
                 
-                if(parsedData.code !== 200){
+                if(parsedData.code !== 200 || !parsedData.list_app ){
                     return event.reply('reply-login-launcher', {code : parsedData.code, message : parsedData.message  });
                 }
     
-                __LIST_APP_RUN__ = data_ws.message;
-                event.reply('reply-login-launcher', {code : parsedData.code, message : parsedData.message });
+                const buffer = parsedData.list_app
+                _LIST_APP_FOR_USER = []
+                buffer.forEach(element => {
+                    _LIST_APP_FOR_USER.push({app_name : element, app_path : "aca_va_la_ruta", isRun : false})
+                });
+
+                event.reply('reply-login-launcher', {code : parsedData.code, message : parsedData.message, firstName : parsedData.firstName , lastName : parsedData.lastName , list_app : parsedData.list_app , list_comunication : parsedData.list_app });
                 
             } catch (e) {
                 console.error(`ERROR JSON= ${e.message}`);
@@ -68,13 +73,20 @@ ipcMain.on("login-launcher",(event,args_JSON)=>{
 /**
  * Escucha el evento para ABRIR una APP
  */
-ipcMain.on('open-app', (event, args_JSON) => {
+ipcMain.on('open-app', (event, app_name) => {
 
-    if (__LIST_APP_RUN__.find(args_JSON.sistema_chozas) !== null){
+    const json_app = _LIST_APP_.find( row_app => row_app.app_name === app_name);
+    const one_app =  _LIST_APP_FOR_USER.find(row_app=> row_app.app_name === app_name && row_app.isRun === false) 
+    
+    if (!json_app) {
+        return event.reply('reply-open-app', {code : 400,message : "app_not_exist" }); 
+    }
+
+    if (!one_app){
         return event.reply('reply-open-app', {code : 400,message : "app_in_use" }); 
     }
 
-    const ls = child.spawn(args_JSON.app_path);
+    const ls = child.spawn(json_app.app_path);
 
     ls.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
@@ -85,9 +97,18 @@ ipcMain.on('open-app', (event, args_JSON) => {
     });
 
     ls.on('close', (code) => {
-        return event.reply('reply-close-app', {code : 200,message : "app_close" }); 
+        _LIST_APP_FOR_USER.forEach(element =>{ if(element.app_name === one_app.app_name) element.isRun = false})
+        return event.reply('reply-close-app', {code : 200, message : "app_close", app_name : json_app.app_name }); 
     });
 
-    __LIST_APP_RUN__.push(args_JSON.app_name);
-    return event.reply('reply-open-app', {code : 200,message : "app_opened" }); 
+    _LIST_APP_FOR_USER.forEach(element =>{ if(element.app_name === one_app.app_name) element.isRun = true})
+
+    return event.reply('reply-open-app', {code : 200,message : "app_open" }); 
+});
+
+/**
+ * Elimina la lista de APP
+ */
+ipcMain.on("logout-launcher",()=>{
+    _LIST_APP_FOR_USER = {}
 });

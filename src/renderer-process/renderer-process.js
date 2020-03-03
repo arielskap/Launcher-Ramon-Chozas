@@ -10,7 +10,7 @@ function openAPP (btn_element){
 }
 
 function logout() {
-    console.table("CERRO SESION");
+    ipcRenderer.send('logout-launcher')
 }
 
 ipcRenderer.on('reply-open-app',  (event, args_JSON) => {    

@@ -1,7 +1,6 @@
 const { app, BrowserWindow,ipcMain } = require('electron');
 const fs = require("fs");
 const crypto = require("crypto");
-const child = require('child_process');
 const event_listen = require('./main-process/event_listen.js');
 
 let win
