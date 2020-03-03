@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Logo from '../images/logo_chozas2.png';
-import './style.css';
+import './styles/style.css';
 import Login from './Login';
 
 class Home extends React.Component {
