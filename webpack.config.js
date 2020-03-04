@@ -3,17 +3,24 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
-const TerserPlugin = require('terser-webpack-plugin');
+const fs = require('fs');
+
+const nodeModules = {};
+fs.readdirSync('node_modules')
+  .filter((x) => {
+    return ['.bin'].indexOf(x) === -1;
+  })
+  .forEach((mod) => {
+    nodeModules[mod] = `commonjs ${mod}`;
+  });
 
 module.exports = {
+  externals: nodeModules,
   entry: './src/index.js',
+  target: 'node',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-  },
-  mode: 'production',
-  optimization: {
-    minimizer: [new TerserPlugin({ })],
   },
   resolve: {
     extensions: ['.js', '.jsx'],
@@ -88,4 +95,15 @@ module.exports = {
       filename: '[name].css',
     }),
   ],
+  devServer: {
+    historyApiFallback: true,
+    contentBase: './',
+    port: 4172,
+  },
 };
+
+/*
+  node: {
+    fs: 'empty',
+  },
+  */

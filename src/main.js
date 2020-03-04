@@ -16,7 +16,7 @@ app.whenReady().then(() => {
   });
 
   process.env.NODE_ENV === 'dev' && win.webContents.openDevTools();
-  process.env.NODE_ENV === 'dev' && win.loadFile('../dist/index.html');
+  process.env.NODE_ENV === 'dev' && win.loadFile('./dev_index.html');
 
   win.on('closed', () => {
     win = null;

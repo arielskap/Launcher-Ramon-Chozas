@@ -46,7 +46,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
     "start": "webpack-dev-server --open --mode development",
-    "dev": "set NODE_ENV=dev electron src/main.js",
+    "startWeb": "webpack-dev-server",
+    "dev": "env NODE_ENV=dev electron src/main.js",
     "prod": "set NODE_ENV=pro electron dist/main.js"
   },
   "repository": {

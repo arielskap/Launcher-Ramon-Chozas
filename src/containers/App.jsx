@@ -9,7 +9,7 @@ const App = () => {
     <HashRouter>
       <Switch>
         <Route exact path='/'>
-          <Login />
+          <Home />
         </Route>
         <Route path='/home'>
           <Home />
