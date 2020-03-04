@@ -8,7 +8,7 @@ class Home extends React.Component {
   render() {
 
     return (
-      <main className='w-screen h-screen'>
+      <main className='Login w-screen h-screen'>
         <div id='inicio'>
           <div className='p-5 h-48' id='imgChozas'>
             <img className='object-contain h-full w-full' src={Logo} alt='Logo' />

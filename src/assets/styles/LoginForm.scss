@@ -1,31 +1,32 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
 
-main{
-  width: 100%;
-  min-height: calc(100vh - 60px);
-  background: linear-gradient(to right, rgb(44, 95, 179),rgb(41, 158, 201));
-  background-size: 400% 400%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: Lato;
-  animation: Gradient 5s ease;
-  }
+.Login {
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    background: linear-gradient(to right, rgb(44, 95, 179), rgb(41, 158, 201));
+    background-size: 400% 400%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Lato;
+    animation: Gradient 5s ease;
+}
 
 
-  main #inicio #imgChozas{
+.Login #inicio #imgChozas {
     width: 300px;
-  }
+}
 
-  .Login{
+.Login {
     background-color: rgba(255, 255, 255, 0.8);
-  }
+}
 
-  @keyframes Gradient {
+@keyframes Gradient {
     0% {
-      background-position: 100%
+        background-position: 100%
     }
+
     100% {
-      background-position: 0%
+        background-position: 0%
     }
-  }
+}
