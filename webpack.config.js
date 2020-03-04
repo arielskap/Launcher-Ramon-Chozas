@@ -17,13 +17,12 @@ fs.readdirSync('node_modules')
 module.exports = {
   externals: nodeModules,
   entry: './src/index.js',
-  target: 'node',
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts'],
   },
   module: {
     rules: [
@@ -95,15 +94,4 @@ module.exports = {
       filename: '[name].css',
     }),
   ],
-  devServer: {
-    historyApiFallback: true,
-    contentBase: './',
-    port: 4172,
-  },
 };
-
-/*
-  node: {
-    fs: 'empty',
-  },
-  */

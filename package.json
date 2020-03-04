@@ -44,11 +44,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "electron": "webpack --mode production && env NODE_ENV=dev electron src/main.js",
     "build": "webpack --mode production",
     "start": "webpack-dev-server --open --mode development",
-    "startWeb": "webpack-dev-server",
     "dev": "env NODE_ENV=dev electron src/main.js",
-    "prod": "set NODE_ENV=pro electron dist/main.js"
+    "prod": "electron dist/main.js"
   },
   "repository": {
     "type": "git",
