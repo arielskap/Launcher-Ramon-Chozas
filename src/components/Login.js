@@ -25,7 +25,7 @@ class Login extends React.Component {
     // alert(`You are submitting ${username} ${contraseña}`);
 
     if ((username !== 'fib' && username !== '') || (contraseña !== '' && contraseña !== '12345')) {
-      document.querySelector('#modal').classList = 'visible';
+      document.querySelector('#modal').classList.toggle('invisible');
       document.querySelector('#aviso1').innerText = 'Usuario incorrecto';
       document.querySelector('#aviso2').innerText = 'Contraseña Incorrecta';
     }
@@ -39,7 +39,11 @@ class Login extends React.Component {
   }
 
   onClose = (e) => {
-    document.querySelector('#modal').classList = 'invisible';
+    document.querySelector('#modal').classList.toggle('invisible');
+  }
+
+  componentDidMount() {
+    document.getElementById('username').focus();
   }
 
   render() {
