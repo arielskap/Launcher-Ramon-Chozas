@@ -1,23 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400,700');
 
 .Login {
-    width: 100%;
-    min-height: calc(100vh - 60px);
-    background: linear-gradient(to right, rgb(44, 95, 179), rgb(41, 158, 201));
-    background-size: 400% 400%;
     display: flex;
-    align-items: center;
     justify-content: center;
-    font-family: Lato;
+    align-items: center;
+    flex-direction: column;
+    background: linear-gradient(to right, rgb(44, 95, 179),rgb(41, 158, 201),white,white);
+    background-size: 400% 400%;
     animation: Gradient 5s ease;
 }
 
-
-.Login #inicio #imgChozas {
-    width: 300px;
-}
-
-.Login {
+.Form {
     background-color: rgba(255, 255, 255, 0.8);
 }
 

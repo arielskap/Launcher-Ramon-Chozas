@@ -8,9 +8,9 @@ class Home extends React.Component {
   render() {
 
     return (
-      <main className='Login w-screen h-screen'>
-        <div id='inicio'>
-          <div className='p-5 h-48' id='imgChozas'>
+      <main className='Login w-full h-full'>
+        <div id='inicio' className='w-full h-full flex items-center justify-center flex-col'>
+          <div className='h-48' id='imgChozas'>
             <img className='object-contain h-full w-full' src={Logo} alt='Logo' />
           </div>
           <div className='text-center'>
