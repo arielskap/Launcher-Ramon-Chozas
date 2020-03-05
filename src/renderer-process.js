@@ -1,11 +1,11 @@
 import { ipcRenderer as ipc } from 'electron';
 
 export const login = () => {
-  ipc.send('login-launcher', { userName: input_userName.value, password: input_password.value });
+  ipc.send('login-launcher', { userName: username.value, password: password.value });
 };
 
 export const openAPP = (btnElement) => {
-  ipc.send('open-app', btnElement.id);
+  ipc.send('open-app', btnElement);
 };
 
 export const logout = () => {

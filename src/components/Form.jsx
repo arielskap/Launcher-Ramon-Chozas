@@ -1,70 +1,102 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import { ipcRenderer as ipc } from 'electron';
+import { login } from '../renderer-process';
+import ExitModal from './ExitModal';
+import '../assets/styles/Form.scss';
 
-class Form extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      contraseña: '',
-    };
-  }
+const Form = () => {
+  const [information, setInformation] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const history = useHistory();
 
-  handlerChange = (event) => {
-    const nam = event.target.name;
-    const val = event.target.value;
-    this.setState({ [nam]: val });
-  }
+  const handleCloseModal = () => {
+    setModalIsOpen(false);
+  };
 
-  handleSubmit = (e) => {
+  const handleOpenModal = () => {
+    setModalIsOpen(true);
+  };
+
+  const handlePasswordExpired = () => {
+    history.push('/expired');
+  };
+
+  const handleSubmit = (e) => {
+    const username = document.querySelector('#username');
+    const password = document.querySelector('#password');
     e.preventDefault();
-    const { username, contraseña } = this.state;
-    if (username === '') {
-      document.querySelector('#username').classList.add('border-red-500');
-    }
-    if (contraseña === '') {
-      document.querySelector('#password').classList.add('border-red-500');
-    }
-  }
 
-  render() {
-    let aviso1 = '';
-    let aviso2 = '';
-    const { username, contraseña } = this.state;
-    if (!username) {
-      aviso1 = 'Ingrese el usuario';
-    } else {
-      aviso1 = '';
-    }
-    if (!contraseña) {
-      aviso2 = 'Ingrese su contraseña';
-    } else {
-      aviso2 = '';
-    }
+    document.querySelector('.button_submit_Form').setAttribute('disabled', '');
 
-    return (
-      <form className='Form shadow-md rounded px-8 pt-6 pb-8 mb-4' onSubmit={(this.handleSubmit)}>
+    login();
+
+    setInformation('🕑 Validando los datos... 🕑');
+
+    ipc.on('reply-login-launcher', (event, argsJSON) => {
+      const { message, code } = argsJSON;
+      document.querySelector('.button_submit_Form').removeAttribute('disabled');
+      if (code === 200) {
+        history.push('/home');
+      } else if (code === 201) {
+        handleOpenModal();
+      } else if (code >= 400) {
+        if (code === 400) {
+          if (username.value === '') {
+            username.classList.add('border-red-500');
+          }
+          if (password.value === '') {
+            password.classList.add('border-red-500');
+          }
+        } else if (code === 401) {
+          username.classList.add('border-red-500');
+          password.classList.add('border-red-500');
+        } else if (code === 402) {
+          username.classList.add('border-gray-300');
+          password.classList.add('border-red-500');
+        }
+        setInformation(message);
+      }
+    });
+  };
+
+  useEffect(() => {
+    document.getElementById('username').focus();
+  }, []);
+
+  return (
+    <>
+      <form className='Form shadow-md rounded px-8 pt-6 pb-8 mb-4' onSubmit={handleSubmit}>
+        <Link to='/home'>
+          Go to Home
+        </Link>
         <div className='mb-4'>
           <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='username'>
-            Usuario
-            <input onChange={this.handlerChange} className='shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline' name='username' id='username' type='text' placeholder='Usuario' />
+            Usuario:
+            <input autoComplete='username' className='shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline' name='username' id='username' type='text' placeholder='Usuario' tabIndex={0} />
           </label>
-          <p className='text-red-500 text-xs italic'>{aviso1}</p>
         </div>
         <div className='mb-6'>
           <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='password'>
-            Contraseña
-            <input onChange={this.handlerChange} className='shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline' name='contraseña' id='password' type='password' placeholder='Ingrese Contraseña' />
+            Contraseña:
+            <input autoComplete='current-password' className='shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline' name='contraseña' id='password' type='password' placeholder='Ingrese Contraseña' tabIndex={0} />
           </label>
-          <p className='text-red-500 text-xs italic'>{aviso2}</p>
         </div>
-        <div className='flex items-center justify-end'>
-          <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit'>
+        <div className='div_information text-center text-red-500 text-xs italic my-4'>
+          <p>{information}</p>
+        </div>
+        <div className='flex items-center justify-center'>
+          <button className='button_submit_Form bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit' tabIndex={0}>
             Iniciar Sesión
           </button>
         </div>
+        <div className='pt-5 text-right'>
+          <button type='button' className='text-gray-600 text-xs italic hover:text-blue-600 py-4' tabIndex={0}>¿Olvidó su contraseña?</button>
+        </div>
       </form>
-    );
-  }
-}
+      <ExitModal isOpen={modalIsOpen} onCloseModal={handleCloseModal} onConfirm={handlePasswordExpired}>⚠ ¡Se vencio la constraseña! ⚠</ExitModal>
+    </>
+  );
+};
 
 export default Form;

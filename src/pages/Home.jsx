@@ -34,7 +34,7 @@ const Home = () => {
   };
 
   return (
-    <section className='Home p-4 h-full w-full flex flex-col animated fadeIn'>
+    <section className='Home p-4 h-full w-full flex flex-col animated fadeIn text-white'>
       <div className='Home__header flex items-center justify-between'>
         <div className='w-24'>
           <img className='object-contain h-full w-full' src={logoChozas} alt='Logo Chozas' />
