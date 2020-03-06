@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Launcher RCH</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <script src="./renderer-process/renderer-process.js" defer></script>
+    <script src="./renderer-process.js" defer></script>
     <style>
       body {
         background-color: #2C5FB3;
@@ -39,6 +39,7 @@
   <body>
     <h1 class="titulo">Login Launcher Ramon Chozas</h1>
     <!-------------------LOGIN-------------------------->
+    <br>
     <section class="">
       <form id="div_login" >
         <input type="text" value="sistema"  id="input_userName" required>
@@ -46,7 +47,27 @@
         <button id="btn_login" type="button" onclick="login()" >Login</button>
       </form>
     </section>
+    <!-------------------EXPIRED-------------------------->
+    <br>
+    <section class="">
+      <form id="div_login" >
+        <input type="password"   id="input_newPassword" required>
+        <input type="password"  id="input_confirmPassword" required>
+        <button id="btn_newPassword" type="button" onclick="expired()">Confirmar nueva contraseña</button>
+      </form>
+    </section>
+    <!-------------------FORGET-------------------------->
+    <br>
+    <section class="">
+      <form id="div_login" >
+        <input type="text"  id="input_userNameFORGET" required>
+        <input type="number"  id="input_dni" required>
+        <input type="text"  id="responsable" required>
+        <button id="btn_forgetPassword" type="button" onclick="forget()">Restaurar Contraseña</button>
+      </form>
+    </section>
     <!--------------------HOME------------------------>
+    <br>
     <section>
         <div>
           <button onclick="openAPP(this)" id="sistema_chozas">Sistema Chozas</button>
