@@ -21,7 +21,11 @@ const Home = () => {
               <FormContainer />
             </Route>
             <Route path='/expired'>
-              <FormContainer />
+              <div>
+                <h1>
+                  from fantasma
+                </h1>
+              </div>
             </Route>
           </Switch>
         </div>

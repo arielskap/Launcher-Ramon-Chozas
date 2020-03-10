@@ -17,7 +17,7 @@ const FormContainer = () => {
       setModalIsOpen(false);
       document.querySelector('.button_submit_Form').removeAttribute('disabled');
       document.querySelector('.button_submit_Form').classList.remove('opacity-50', 'cursor-not-allowed');
-      setInformation(`⚠ ${message} ⚠`);
+      setInformation(`⚠ ${message}`);
     });
     animateCSS('.Modal', 'fadeOut faster');
   };
@@ -37,6 +37,7 @@ const FormContainer = () => {
     const password = document.querySelector('#password');
     e.preventDefault();
 
+    document.body.classList.add('cursor-wait');
     document.querySelector('.button_submit_Form').setAttribute('disabled', '');
     document.querySelector('.button_submit_Form').classList.add('opacity-50', 'cursor-not-allowed');
     login();
@@ -54,10 +55,14 @@ const FormContainer = () => {
 
     ipcRenderer.on('reply-login-launcher', (event, argsJSON) => {
       const { message, code } = argsJSON;
+      document.body.classList.remove('cursor-wait');
       if (code === 200) {
         animateCSS('.Login', 'fadeOut faster', () => {
-          history.push('/home');
+          //history.push('/home');
         });
+        console.log('voy a home')
+        document.querySelector('.button_submit_Form').removeAttribute('disabled');
+        document.querySelector('.button_submit_Form').classList.remove('opacity-50', 'cursor-not-allowed');
       } else if (code === 201) {
         handleOpenModal();
       } else if (code >= 400) {
@@ -78,7 +83,7 @@ const FormContainer = () => {
           password.classList.add('border-red-500');
         }
         animateCSS('.p_information', 'fadeOut faster', () => {
-          setInformation(`⚠ ${message} ⚠`);
+          setInformation(`⚠ ${message}`);
           animateCSS('.p_information', 'fadeIn faster');
         });
       }
