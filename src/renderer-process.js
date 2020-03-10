@@ -1,29 +1,29 @@
 
 const { ipcRenderer } = require('electron');
 
-function login() {
-  ipcRenderer.send('login-launcher', { userName: input_userName.value, password: input_password.value });
+export const login = () => {
+  ipcRenderer.send('login-launcher', { userName: username.value, password: password.value });
 };
 
-function openAPP(btnElement) {
-  ipcRenderer.send('open-app', btnElement.id);
+export const openAPP = (btnElement) => {
+  ipcRenderer.send('open-app', btnElement);
 };
 
-function logout() {
+export const logout = () => {
   ipcRenderer.send('logout-launcher');
 };
 
 // PASO 1
-function listSupervisor() {
+export function listSupervisor() {
   ipcRenderer.send('list-supervisor', { userName: input_userNameListSupervisor.value, dni: input_dniListSupervisor.value });
 };
 
 // PASO 2
-function forget() {
+export function forget() {
   ipcRenderer.send('forget-password', { userName: input_userNameForget.value, dni: input_dniForget.value, supervisor: input_supervisorForget.value });
 };
 
-function expired() {
+export function expired() {
   ipcRenderer.send('expired-password', { userName: input_userNameExpired.value, password: input_passwordExpired.value, newPassword: input_newPasswordExpired.value, confirmPassword: input_confirmPasswordExpired.value });
 };
 

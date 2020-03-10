@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import ButtonMenu from '../components/ButtonMenu';
 import TableCarousel from '../components/TableCarousel';
 import ExitModal from '../components/ExitModal';
@@ -6,14 +7,19 @@ import { logout, openAPP } from '../renderer-process';
 import '../assets/styles/Home.scss';
 import logoChozas from '../assets/static/logo_chozas2.png';
 import imgPerfil from '../assets/static/thrall.jpg';
+import animateCSS from '../funciones';
 
 const Home = () => {
   const [modalExitIsOpen, setModalExitIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const history = useHistory();
 
   const handleCloseModal = () => {
-    setModalExitIsOpen(false);
-    setModalIsOpen(false);
+    animateCSS('.Modal__container', 'slideOutUp faster', () => {
+      setModalExitIsOpen(false);
+      setModalIsOpen(false);
+    });
+    animateCSS('.Modal', 'fadeOut faster');
   };
 
   const handleOpenModalExit = () => {
@@ -31,10 +37,11 @@ const Home = () => {
   const handleLogOut = () => {
     logout();
     //alert('Cerro sesion');
+    history.push('/');
   };
 
   return (
-    <section className='Home p-4 h-full w-full flex flex-col animated fadeIn'>
+    <section className='Home p-4 h-full w-full flex flex-col animated fadeIn text-white'>
       <div className='Home__header flex items-center justify-between'>
         <div className='w-24'>
           <img className='object-contain h-full w-full' src={logoChozas} alt='Logo Chozas' />
