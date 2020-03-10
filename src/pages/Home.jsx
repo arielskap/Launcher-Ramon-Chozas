@@ -49,6 +49,9 @@ const Home = () => {
     queryElement.classList.remove('bg-transparent', 'text-white-700', 'border-blue-500');
     document.body.classList.add('cursor-wait');
 
+  };
+
+  useEffect(() => {
     ipcRenderer.on('reply-open-app', (event, argsJSON) => {
       document.body.classList.remove('cursor-wait');
     });
@@ -58,8 +61,7 @@ const Home = () => {
       queryElement.classList.add('bg-transparent', 'text-white-700', 'border-blue-500');
       queryElement.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
     });
-
-  };
+  }, []);
 
   return (
     <section className='Home p-4 h-full w-full flex flex-col animated fadeIn text-white'>

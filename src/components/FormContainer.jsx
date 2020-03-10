@@ -33,8 +33,6 @@ const FormContainer = () => {
   };
 
   const handleSubmit = (e) => {
-    const username = document.querySelector('#username');
-    const password = document.querySelector('#password');
     e.preventDefault();
 
     document.body.classList.add('cursor-wait');
@@ -52,17 +50,29 @@ const FormContainer = () => {
         setInformation('🕑 Validando los datos... 🕑');
       });
     }
+  };
 
+  const handleSwitchVisiblePass = () => {
+    const inputPass = document.querySelector('#password');
+    if (inputPass.getAttribute('type') === 'password') {
+      inputPass.setAttribute('type', 'text');
+      document.querySelector('.img__visiblePass').src = noVer;
+    } else {
+      inputPass.setAttribute('type', 'password');
+      document.querySelector('.img__visiblePass').src = ver;
+    }
+  };
+  useEffect(() => {
+    document.getElementById('username').focus();
     ipcRenderer.on('reply-login-launcher', (event, argsJSON) => {
       const { message, code } = argsJSON;
+      const username = document.querySelector('#username');
+      const password = document.querySelector('#password');
       document.body.classList.remove('cursor-wait');
       if (code === 200) {
         animateCSS('.Login', 'fadeOut faster', () => {
-          //history.push('/home');
+          history.push('/home');
         });
-        console.log('voy a home')
-        document.querySelector('.button_submit_Form').removeAttribute('disabled');
-        document.querySelector('.button_submit_Form').classList.remove('opacity-50', 'cursor-not-allowed');
       } else if (code === 201) {
         handleOpenModal();
       } else if (code >= 400) {
@@ -88,20 +98,6 @@ const FormContainer = () => {
         });
       }
     });
-  };
-
-  const handleSwitchVisiblePass = () => {
-    const inputPass = document.querySelector('#password');
-    if (inputPass.getAttribute('type') === 'password') {
-      inputPass.setAttribute('type', 'text');
-      document.querySelector('.img__visiblePass').src = noVer;
-    } else {
-      inputPass.setAttribute('type', 'password');
-      document.querySelector('.img__visiblePass').src = ver;
-    }
-  };
-  useEffect(() => {
-    document.getElementById('username').focus();
   }, []);
 
   return (

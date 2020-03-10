@@ -28,9 +28,6 @@ export function expired() {
 };
 
 /*
-ipcRenderer.on('reply-login-launcher', (event, argsJSON) => {
-  console.table(argsJSON);
-});
 
 ipcRenderer.on('reply-open-app', (event, argsJSON) => {
   console.table(argsJSON);
