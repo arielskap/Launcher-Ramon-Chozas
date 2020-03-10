@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { ipcRenderer as ipc } from 'electron';
 import { login } from '../renderer-process';
 import ExitModal from './ExitModal';
+import animateCSS from '../funciones';
 import '../assets/styles/Form.scss';
 
 const Form = () => {
@@ -28,19 +29,31 @@ const Form = () => {
     e.preventDefault();
 
     document.querySelector('.button_submit_Form').setAttribute('disabled', '');
-
+    document.querySelector('.button_submit_Form').classList.add('opacity-50', 'cursor-not-allowed');
     login();
 
-    setInformation('🕑 Validando los datos... 🕑');
+    if (!information) {
+      animateCSS('.p_information', 'fadeOut faster', () => {
+        setInformation('🕑 Validando los datos... 🕑');
+        animateCSS('.p_information', 'fadeIn faster');
+      });
+    } else {
+      animateCSS('.p_information', 'fadeIn faster', () => {
+        setInformation('🕑 Validando los datos... 🕑');
+      });
+    }
 
     ipc.on('reply-login-launcher', (event, argsJSON) => {
       const { message, code } = argsJSON;
-      document.querySelector('.button_submit_Form').removeAttribute('disabled');
       if (code === 200) {
-        history.push('/home');
+        animateCSS('.Login', 'fadeOut faster', () => {
+          history.push('/home');
+        });
       } else if (code === 201) {
         handleOpenModal();
       } else if (code >= 400) {
+        document.querySelector('.button_submit_Form').removeAttribute('disabled');
+        document.querySelector('.button_submit_Form').classList.remove('opacity-50', 'cursor-not-allowed');
         if (code === 400) {
           if (username.value === '') {
             username.classList.add('border-red-500');
@@ -55,7 +68,10 @@ const Form = () => {
           username.classList.add('border-gray-300');
           password.classList.add('border-red-500');
         }
-        setInformation(message);
+        animateCSS('.p_information', 'fadeOut faster', () => {
+          setInformation(`⚠ ${message} ⚠`);
+          animateCSS('.p_information', 'fadeIn faster');
+        });
       }
     });
   };
@@ -66,7 +82,7 @@ const Form = () => {
 
   return (
     <>
-      <form className='Form shadow-md rounded px-8 pt-6 pb-8 mb-4' onSubmit={handleSubmit}>
+      <form className='Form shadow-md rounded px-8 pt-6 pb-8 mb-4 animated fadeIn' onSubmit={handleSubmit}>
         <Link to='/home'>
           Go to Home
         </Link>
@@ -82,8 +98,8 @@ const Form = () => {
             <input autoComplete='current-password' className='shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline' name='contraseña' id='password' type='password' placeholder='Ingrese Contraseña' tabIndex={0} />
           </label>
         </div>
-        <div className='div_information text-center text-red-500 text-xs italic my-4'>
-          <p>{information}</p>
+        <div className='div_information text-center text-red-500 text-xs my-4'>
+          <p className='p_information'>{information}</p>
         </div>
         <div className='flex items-center justify-center'>
           <button className='button_submit_Form bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline' type='submit' tabIndex={0}>
