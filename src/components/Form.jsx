@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { ipcRenderer as ipc } from 'electron';
+import { ipcRenderer } from 'electron';
 import { login } from '../renderer-process';
 import ExitModal from './ExitModal';
 import animateCSS from '../funciones';
@@ -43,7 +43,7 @@ const Form = () => {
       });
     }
 
-    ipc.on('reply-login-launcher', (event, argsJSON) => {
+    ipcRenderer.on('reply-login-launcher', (event, argsJSON) => {
       const { message, code } = argsJSON;
       if (code === 200) {
         animateCSS('.Login', 'fadeOut faster', () => {
