@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Launcher RCH</title>
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <script src="./renderer-process/renderer-process.js" defer></script>
+    <script src="./renderer-process.js" defer></script>
     <style>
       body {
         background-color: #2C5FB3;
@@ -39,15 +39,70 @@
   <body>
     <h1 class="titulo">Login Launcher Ramon Chozas</h1>
     <!-------------------LOGIN-------------------------->
+    <br>
     <section class="">
+      <h2>Login</h2>
       <form id="div_login" >
+        <label for="input_userName">Usuario</label>
         <input type="text" value="sistema"  id="input_userName" required>
+        <label for="input_password">Password</label>
         <input type="password" value="sistema123" id="input_password" required>
         <button id="btn_login" type="button" onclick="login()" >Login</button>
       </form>
     </section>
+    <!-------------------EXPIRED-------------------------->
+    <br>
+    <section class="">
+      <h2>Contraseña Vencida</h2>
+      <form id="div_login" >
+        <label for="input_userNameExpired">Usuario</label>
+        <input type="text" value="sistema" id="input_userNameExpired" required>
+        <label for="input_passwordExpired">Password Actual</label>
+        <input type="password" value="sistema123"  id="input_passwordExpired" required>
+        <label for="input_newPasswordExpired">Nuevo Password </label>
+        <input type="password"  id="input_newPasswordExpired" required>
+        <label for="input_confirmPasswordExpired">Confirma Password </label>
+        <input type="password" id="input_confirmPasswordExpired" required>
+        <button id="btn_newPassword" type="button" onclick="expired()">Confirmar nueva contraseña</button>
+      </form>
+    </section>
+    <!-------------------LIST_SUPERVISOR-------------------------->
+    <br>
+    <section class="">
+      <div>
+        <h4>Forget Step 1 - Solicitud de Supervisores</h4>
+        <form id="div_list_supervisor" >
+          <label for="input_userNameListSupervisor">Usuario</label>
+          <input type="text" value="sistema" id="input_userNameListSupervisor" required>
+          <label for="input_dniListSupervisor">DNI</label>
+          <input type="number" value="123" id="input_dniListSupervisor" required>
+          <button type="button" onclick="listSupervisor()">Step 1 - Buscar Supervisores</button>
+        </form>  
+      </div>
+
+      <div>
+        <h4>Forget Step 2 - Confirmar</h4>
+        <form id="div_forget" >
+          <label for="input_userNameForget">Usuario</label>
+          <input type="text" value="sistema" id="input_userNameForget" required>
+          <label for="input_dniForget">DNI</label>
+          <input type="number" value="123" id="input_dniForget" required>
+          <label for="input_supervisorForget">Supervisor</label>
+          <input type="text" value="Alfredo Guillot" id="input_supervisorForget" required>
+          <button  type="button" onclick="forget()">Step 2 -  Restaurar Contraseña</button>
+        </form>
+      </div>
+    </section>
+      
+        <!-------------------FORGET-------------------------->
+        <br>
+        <section class="">
+         
+        </section>
     <!--------------------HOME------------------------>
+    <br>
     <section>
+      <h2>Lista de Aplicaciones</h2>
         <div>
           <button onclick="openAPP(this)" id="sistema_chozas">Sistema Chozas</button>
         </div>
