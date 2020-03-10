@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 import ButtonMenu from '../components/ButtonMenu';
