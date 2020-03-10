@@ -27,6 +27,10 @@ function login(event, parsedData) {
 
   event.reply('reply-login-launcher', parsedData);
 
+  if (!listAPP || listAPP === [] || listAPP === {}) {
+    return null;
+  }
+
   return listAPP;
 }
 
