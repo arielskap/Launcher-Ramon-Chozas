@@ -3,6 +3,8 @@ import { Switch, Route } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
 import Logo from '../assets/static/logo_chozas2.png';
 import '../assets/styles/Login.scss';
+import NuevaPass from '../components/NuevaPass';
+//import ForgetPass from '../components/ForgetPass';
 
 const Home = () => {
   const handleCloseApp = () => {
@@ -20,13 +22,11 @@ const Home = () => {
             <Route exact path='/'>
               <FormContainer />
             </Route>
-            <Route path='/expired'>
-              <div>
-                <h1>
-                  from fantasma
-                </h1>
-              </div>
-            </Route>
+            <Switch>
+              <Route exact path='/expired'>
+                <NuevaPass />
+              </Route>
+            </Switch>
           </Switch>
         </div>
         <div>
