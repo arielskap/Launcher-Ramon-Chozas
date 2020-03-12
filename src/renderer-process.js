@@ -27,9 +27,7 @@ export function expired() {
   ipcRenderer.send('expired-password', { userName: input_userNameExpired.value, password: input_passwordExpired.value, newPassword: input_newPasswordExpired.value, confirmPassword: input_confirmPasswordExpired.value });
 };
 
-ipcRenderer.on('reply-login-launcher', (event, argsJSON) => {
-  console.table(argsJSON);
-});
+/*
 
 ipcRenderer.on('reply-open-app', (event, argsJSON) => {
   console.table(argsJSON);
@@ -54,3 +52,4 @@ ipcRenderer.on('reply-expired-password', (event, argsJSON) => {
 ipcRenderer.on('reply-list-supervisor', (event, argsJSON) => {
   console.table(argsJSON);
 });
+*/

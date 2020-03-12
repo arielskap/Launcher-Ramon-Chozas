@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { ipcRenderer } from 'electron';
 import ButtonMenu from '../components/ButtonMenu';
 import TableCarousel from '../components/TableCarousel';
 import ExitModal from '../components/ExitModal';
@@ -40,6 +41,28 @@ const Home = () => {
     history.push('/');
   };
 
+  const handleOpenApp = (element, aplication) => {
+    const queryElement = document.querySelector(`.${element}`);
+    openAPP(aplication);
+    queryElement.setAttribute('disabled', '');
+    queryElement.classList.add('bg-blue-500', 'text-white', 'border-transparent');
+    queryElement.classList.remove('bg-transparent', 'text-white-700', 'border-blue-500');
+    document.body.classList.add('cursor-wait');
+
+  };
+
+  useEffect(() => {
+    ipcRenderer.on('reply-open-app', (event, argsJSON) => {
+      document.body.classList.remove('cursor-wait');
+    });
+
+    ipcRenderer.on('reply-close-app', (event, argsJSON) => {
+      queryElement.removeAttribute('disabled');
+      queryElement.classList.add('bg-transparent', 'text-white-700', 'border-blue-500');
+      queryElement.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
+    });
+  }, []);
+
   return (
     <section className='Home p-4 h-full w-full flex flex-col animated fadeIn text-white'>
       <div className='Home__header flex items-center justify-between'>
@@ -62,15 +85,19 @@ const Home = () => {
         <div className='grid grid-cols-2 gap-4 div_menu pt-6'>
           <div className='flex flex-col justify-between text-xl'>
             <div className='flex justify-center flex-col px-12'>
-              <ButtonMenu onClick={() => {
-                openAPP('sistema_chozas');
-              }}
+              <ButtonMenu
+                className='button__chozas'
+                onClick={() => {
+                  handleOpenApp('button__chozas', 'sistema_chozas');
+                }}
               >
                 Ramon Chozas SA
               </ButtonMenu>
-              <ButtonMenu onClick={() => {
-                openAPP('hoja_de_ruta');
-              }}
+              <ButtonMenu
+                className='button__hojaRuta'
+                onClick={() => {
+                  handleOpenApp('button__hojaRuta', 'hoja_de_ruta');
+                }}
               >
                 Hoja de Ruta
               </ButtonMenu>
