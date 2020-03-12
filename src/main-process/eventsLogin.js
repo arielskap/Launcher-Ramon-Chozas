@@ -17,11 +17,11 @@ const _PATH_EXPIRED_ = '/node/build/expired';
  */
 ipcMain.on('login-launcher', (event, argsJSON) => {
   if (!argsJSON.userName || argsJSON.userName === undefined) {
-    return event.reply('reply-login-launcher', { code: 401, type: 'local', message: 'Usuario es nulo' });
+    return event.reply('reply-login-launcher', { code: 401, type: 'local', message: 'Ingrese Usuario' });
   }
 
   if (!argsJSON.password || argsJSON.password === undefined) {
-    return event.reply('reply-login-launcher', { code: 402, type: 'local', message: 'Contraseña es nula' });
+    return event.reply('reply-login-launcher', { code: 402, type: 'local', message: 'Ingrese Contraseña' });
   }
 
   const postData = querystring.stringify({ userName: argsJSON.userName, password: argsJSON.password, user_windows: os.userInfo().username });
@@ -59,11 +59,11 @@ ipcMain.on('login-launcher', (event, argsJSON) => {
  */
 ipcMain.on('list-supervisor', (event, argsJSON) => {
   if (!argsJSON.userName || !argsJSON.userName === '') {
-    return event.reply('reply-list-supervisor', { code: 400, type: 'local', message: 'Usuario es nulo', body: 'userName-dni' });
+    return event.reply('reply-list-supervisor', { code: 400, type: 'local', message: 'Ingrese Usuario', body: 'userName-dni' });
   }
 
   if (!argsJSON.dni || !argsJSON.dni < 0) {
-    return event.reply('reply-list-supervisor', { code: 400, type: 'local', message: 'DNI es nulo', body: 'userName-dni' });
+    return event.reply('reply-list-supervisor', { code: 400, type: 'local', message: 'Ingrese DNI', body: 'userName-dni' });
   }
 
   const postData = querystring.stringify({ userName: argsJSON.userName, dni: argsJSON.dni, user_windows: os.userInfo().username });
@@ -100,14 +100,14 @@ ipcMain.on('list-supervisor', (event, argsJSON) => {
  */
 ipcMain.on('forget-password', (event, argsJSON) => {
 
-  if (!argsJSON.userName || argsJSON.userName === '') {
-    return event.reply('reply-forget-password', { code: 401, type: 'local', message: 'Usuario es nulo', body: 'userName-dni-supervisor' });
+  if (!argsJSON.userName || argsJSON.userName.length < 1) {
+    return event.reply('reply-forget-password', { code: 401, type: 'local', message: 'Ingrese Usuario', body: 'userName-dni-supervisor' });
   }
-  if (!argsJSON.dni || !argsJSON.dni < 1) {
-    return event.reply('reply-forget-password', { code: 403, type: 'local', message: 'DNI es nulo', body: 'userName-dni-supervisor' });
+  if (!argsJSON.dni || argsJSON.dni < 1) {
+    return event.reply('reply-forget-password', { code: 403, type: 'local', message: 'Ingrese DNI', body: 'userName-dni-supervisor' });
   }
-  if (!argsJSON.supervisor || argsJSON.supervisor === '') {
-    return event.reply('reply-forget-password', { code: 404, type: 'local', message: 'Supervisor es nulo', body: 'userName-dni-supervisor' });
+  if (!argsJSON.supervisor || argsJSON.supervisor.length < 1) {
+    return event.reply('reply-forget-password', { code: 404, type: 'local', message: 'Seleccione un Supervisor', body: 'userName-dni-supervisor' });
   }
   if (!_LIST_SUPERVISOR_FOR_USER || _LIST_SUPERVISOR_FOR_USER.length < 1) {
     return event.reply('reply-forget-password', { code: 400, type: 'local', message: 'Usuario no logeado' });
@@ -148,18 +148,18 @@ ipcMain.on('forget-password', (event, argsJSON) => {
  */
 ipcMain.on('expired-password', (event, argsJSON) => {
   if (!argsJSON.userName || argsJSON.userName === '') {
-    return event.reply('reply-expired-password', { code: 401, type: 'local', message: 'Usuario es nulo', body: 'username-password-newPassword-confirmPassword' });
+    return event.reply('reply-expired-password', { code: 401, type: 'local', message: 'Ingrese Usuario', body: 'username-password-newPassword-confirmPassword' });
   }
 
   if (!argsJSON.password || argsJSON.password === '') {
-    return event.reply('reply-expired-password', { code: 402, type: 'local', message: 'Contraseña actual es nula', body: 'username-password-newPassword-confirmPassword' });
+    return event.reply('reply-expired-password', { code: 402, type: 'local', message: 'Ingres su Contraseña actual', body: 'username-password-newPassword-confirmPassword' });
   }
 
   if (!argsJSON.newPassword || argsJSON.newPassword === '') {
-    return event.reply('reply-expired-password', { code: 400, type: 'local', message: 'Nueva contraseña es nula', body: 'username-password-newPassword-confirmPassword' });
+    return event.reply('reply-expired-password', { code: 400, type: 'local', message: 'Ingrese su Nueva contraseña', body: 'username-password-newPassword-confirmPassword' });
   }
   if (!argsJSON.confirmPassword || argsJSON.confirmPassword === '') {
-    return event.reply('reply-expired-password', { code: 400, type: 'local', message: 'Confirmacion de contraseña es nula', body: 'username-password-newPassword-confirmPassword' });
+    return event.reply('reply-expired-password', { code: 400, type: 'local', message: 'Ingrese la Confirmacion de contraseña', body: 'username-password-newPassword-confirmPassword' });
   }
 
   if (argsJSON.newPassword.length < 4) {
