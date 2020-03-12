@@ -8,7 +8,7 @@ const FormDetails = ({ information, modalIsOpen, handles }) => {
   const { handleCloseModal, handlePasswordExpired, handleSubmit, handleSwitchVisiblePass } = handles;
   return (
     <>
-      <form className='Form shadow-md rounded px-8 pt-6 pb-8 mb-4 animated fadeIn' onSubmit={handleSubmit}>
+      <form className='Form border-solid border-2 border-white rounded-lg shadow-2xl px-8 pt-6 pb-8 mb-4 animated fadeIn' onSubmit={handleSubmit}>
         <Link to='/home'>
           Go to Home
         </Link>

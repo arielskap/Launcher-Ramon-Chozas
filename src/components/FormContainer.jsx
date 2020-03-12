@@ -60,7 +60,7 @@ const FormContainer = () => {
         animateCSS('.Login', 'fadeOut faster', () => {
           //history.push('/home');
         });
-        console.log('voy a home')
+        console.log('voy a home');
         document.querySelector('.button_submit_Form').removeAttribute('disabled');
         document.querySelector('.button_submit_Form').classList.remove('opacity-50', 'cursor-not-allowed');
       } else if (code === 201) {
