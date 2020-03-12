@@ -48,7 +48,10 @@ handleChange2 = (e) => {
 };
 
 render() {
-  if (this.state.form.username !== '' && this.state.form.dni !== '') {
+  const { form } = this.state;
+  const { username, dni, supervisor } = form;
+
+  if (username !== '' && dni !== '') {
     document.querySelector('.button_submit_Form').classList.remove('opacity-50', 'cursor-not-allowed');
   }
 
@@ -66,7 +69,7 @@ render() {
         </label>
         <div className='flex items-center justify-center'>
           <button type='submit' id='nextBtn' className='button_submit_Form bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline opacity-50 cursor-not-allowed'>Siguiente</button>
-          <h1>{this.state.username}</h1>
+          <h1>{username}</h1>
         </div>
       </div>
       <div className='tab2 hidden'>
@@ -81,7 +84,7 @@ render() {
         </label>
         <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='supervisor'>
           Supervisor:
-          <select value={this.state.form.supervisor} onChange={this.handleChange2} className='block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline' id='supervisor' name='supervisor'>
+          <select value={supervisor} onChange={this.handleChange2} className='block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline' id='supervisor' name='supervisor'>
             <option value='Alfredo Guillot'>Alfredo Guillot</option>
             <option value='Ariel Villareal'>Ariel Villareal</option>
             <option value='Abbul'>Abbul </option>
