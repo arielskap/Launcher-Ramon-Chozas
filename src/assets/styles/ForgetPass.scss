@@ -1,45 +1,15 @@
-#steps{
-  text-align:center;
-  margin-top:40px;
-}
-
-#botones{
-  float:right;
-}
-
-#cont__Botones{
-overflow:auto;
-}
-
 #regForm {
   background-color: #ffffff;
   margin: 100px auto;
-  padding: 40px;
+  padding: 20px;
   width: 70%;
   min-width: 300px;
 }
 
-/* Style the input fields */
-input {
-  padding: 10px;
-  width: 100%;
-  font-size: 17px;
-  font-family: Raleway;
-  border: 1px solid #aaaaaa;
-}
-
-/* Mark input boxes that gets an error on validation: */
-input.invalid {
-  background-color: #ffdddd;
-}
-
-
-/* Make circles that indicate the steps of the form: */
 .step1 {
   height: 15px;
   width: 15px;
   margin: 0 2px;
-  background-color: #504c4c;
   border: none;
   border-radius: 50%;
   display: inline-block;
@@ -50,7 +20,6 @@ input.invalid {
   height: 15px;
   width: 15px;
   margin: 0 2px;
-  background-color: #bbbbbb;
   border: none;
   border-radius: 50%;
   display: inline-block;
