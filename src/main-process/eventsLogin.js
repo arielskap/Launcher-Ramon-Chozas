@@ -45,8 +45,13 @@ ipcMain.on('login-launcher', (event, argsJSON) => {
       return 1;
     }
 
-    _LIST_APP_FOR_USER = login(event, parsedData);
-    return 0;
+    login(event, parsedData).then((element) => {
+      _LIST_APP_FOR_USER = element;
+      return 0;
+    }).catch((err) => {
+      console.log(err);
+      return 1;
+    });
 
   });
 
