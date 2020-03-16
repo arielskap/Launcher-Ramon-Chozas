@@ -1,4 +1,5 @@
 const http = require('http');
+const fs = require('fs');
 
 /**
    *
@@ -69,4 +70,35 @@ function requestGET(options, callback) {
   req.end();
 }
 
-module.exports = { requestPOST, requestGET };
+/**
+   *
+   * @param {JSON} options Son los parametros para la peticion (hostname,path,method,headers,otros...)
+   * @param {function} callback Es la funciona que realizara la accion luego de culminar la peticion al sevidor
+   */
+function requestGETFile(pathCreateFile, options, callback) {
+
+  const req = http.request(options, (res) => {
+
+    const bufs = [];
+    let size = 0;
+
+    res.on('data', (chunk) => {
+      bufs[bufs.length] = chunk;
+      size += chunk.length;
+    });
+
+    res.on('end', () => {
+      content = Buffer.concat(bufs, size);
+      fs.writeFileSync(pathCreateFile, content);
+      callback(true, null);
+    });
+
+  });
+
+  req.on('error', (e) => {
+    callback(null, e.message);
+  });
+  req.end();
+}
+
+module.exports = { requestPOST, requestGET, requestGETFile };

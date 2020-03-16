@@ -1,11 +1,92 @@
 
 const fs = require('fs');
 const crypto = require('crypto');
-const querystring = require('querystring');
-const { requestPOST } = require('./requestSV');
+const yauzl = require('yauzl');
+const { requestGET, requestGETFile } = require('./requestSV');
 
 const _HOSTNAME_ = 'www.dynamicdoc.com.ar';
-const _PATH_UPDATE_ = '/node/build/upgrade';
+const _PATH_ZIP_ = '/node/build/installer';
+
+function getZIPServer(appName, pathFileZIP) {
+
+  const options = {
+    hostname: _HOSTNAME_,
+    //path: `${_PATH_ZIP_}/${appName}`,
+    path: `${_PATH_ZIP_}`,
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+
+  return new Promise((resolve, reject) => {
+
+    requestGETFile(pathFileZIP, options, (resultRequest, error) => {
+      if (error) {
+        console.error(`ERROR PETICION = 
+                        ${error}`);
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject(false);
+      }
+      resolve(true);
+    });
+
+  }).then((result) => {
+    return result;
+  }).catch((err) => {
+    console.error(err);
+  });
+}
+
+function getDependencies(appName) {
+
+  const options = {
+    hostname: _HOSTNAME_,
+    path: `${_PATH_UPDATE_}/${appName}`,
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+  };
+
+  requestGET(options, (parsedData, error) => {
+    if (error) {
+      console.error(`ERROR PETICION = 
+                      ${error}`);
+      return 0;
+    }
+
+    console.log(appName);
+    return 1;
+
+  });
+}
+
+function descompressZIP(pathFile) {
+  yauzl.open(pathFile, { lazyEntries: true }, (err, zipfile) => {
+    if (err) throw err;
+    zipfile.readEntry();
+    zipfile.on('entry', (entry) => {
+      if (/\/$/.test(entry.fileName)) {
+        // Directory file names end with '/'.
+        // Note that entires for directories themselves are optional.
+        // An entry's fileName implicitly requires its parent directories to exist.
+        zipfile.readEntry();
+      } else {
+        // file entry
+        zipfile.openReadStream(entry, (err, readStream) => {
+          if (err) throw err;
+          readStream.on('end', () => {
+            zipfile.readEntry();
+          });
+          console.error(entry);
+          const writeStream = fs.createWriteStream(entry.fileName);
+          readStream.pipe(writeStream);
+        });
+      }
+    });
+  });
+}
 
 function validVersion(appPath, versionServer) {
 
@@ -38,14 +119,10 @@ function login(event, parsedData) {
         code: parsedData.code,
         message: parsedData.message,
       });
-
-      reject(parsedData.code);
+      return reject(parsedData.code);
     }
 
     const listAPP = [];
-
-    /*const size = parsedData.user.list_app.length;
-    const contador = 0;*/
 
     parsedData.user.list_app.forEach(async (element) => {
       const resultValidVersion = await validVersion(element.app_path, element.versionServer);
@@ -56,12 +133,16 @@ function login(event, parsedData) {
         isUpdate: resultValidVersion,
       });
 
-      /*
-      contador++;
-      if (contador === size) {
-        event.reply('reply-login-launcher', parsedData);
-        resolve(listAPP);
-      }*/
+      if (resultValidVersion) {
+        return;
+      }
+      const resultGetZIP = await getZIPServer(element.app_name, `C:/chozassa_v2/${element.app_name}.zip`);
+      if (!resultGetZIP) {
+        return;
+      }
+      //descompressZIP(`C:/chozassa_v2/${element.app_name}.zip`);
+      descompressZIP('C:/prueba/hola_zip.zip');
+
     });
 
     event.reply('reply-login-launcher', parsedData);
@@ -70,31 +151,4 @@ function login(event, parsedData) {
   });
 }
 
-function updateAPP(appName) {
-
-  const postData = querystring.stringify({ userName: argsJSON.userName, password: argsJSON.password, user_windows: os.userInfo().username, app_name: appName });
-
-  const options = {
-    hostname: _HOSTNAME_,
-    path: _PATH_UPDATE_,
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Content-Length': postData.length,
-    },
-  };
-
-  requestPOST(postData, options, (parsedData, error) => {
-    if (error) {
-      console.error(`ERROR PETICION = 
-                      ${error}`);
-      return 0;
-    }
-
-    console.log(parsedData);
-    return 1;
-
-  });
-}
-
-module.exports = { login };
+module.exports = { login, getDependencies };

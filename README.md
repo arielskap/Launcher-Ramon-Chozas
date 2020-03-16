@@ -9,3 +9,12 @@
 2. Todos los eventos emitiran un eventos de respuesta (reply)
 
 3. Para ejecutar solo Electron en modo desarrollo, ejecutar "npm run dev".
+
+* Lista de Respuesta * 
+
+200 - login Correcto
+201 - Contraseña vencida
+400 - Sin parametros para Login
+401 - 'userName' no Existe
+402 - 'password' invalido
+403 - Usuario Deshabilitado
