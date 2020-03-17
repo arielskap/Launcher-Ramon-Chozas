@@ -13,7 +13,6 @@ overflow:auto;
 
 #regForm {
   background-color: #ffffff;
-  margin: 100px auto;
   padding: 40px;
   width: 70%;
   min-width: 300px;
@@ -55,4 +54,16 @@ input.invalid {
   border-radius: 50%;
   display: inline-block;
   opacity: 0.5;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

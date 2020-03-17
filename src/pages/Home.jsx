@@ -37,7 +37,6 @@ const Home = () => {
 
   const handleLogOut = () => {
     logout();
-    //alert('Cerro sesion');
     history.push('/');
   };
 
@@ -63,6 +62,8 @@ const Home = () => {
     });
   }, []);
 
+  const { firstName, lastName, listApp } = JSON.parse(localStorage.getItem('user'));
+  console.log(listApp)
   return (
     <section className='Home p-4 h-full w-full flex flex-col animated fadeIn text-white'>
       <div className='Home__header flex items-center justify-between'>
@@ -77,7 +78,7 @@ const Home = () => {
             <img className='rounded-full object-contain h-full w-full' src={imgPerfil} alt='Perfil' />
           </div>
           <div className='ml-4 text-xl'>
-            <p>Ariel Villarreal</p>
+            <p>{`${firstName} ${lastName}`}</p>
           </div>
         </div>
       </div>
@@ -85,24 +86,23 @@ const Home = () => {
         <div className='grid grid-cols-2 gap-4 div_menu pt-6'>
           <div className='flex flex-col justify-between text-xl'>
             <div className='flex justify-center flex-col px-12'>
-              <ButtonMenu
-                className='button__chozas'
-                onClick={() => {
-                  handleOpenApp('button__chozas', 'sistema_chozas');
-                }}
-              >
-                Ramon Chozas SA
-              </ButtonMenu>
-              <ButtonMenu
-                className='button__hojaRuta'
-                onClick={() => {
-                  handleOpenApp('button__hojaRuta', 'hoja_de_ruta');
-                }}
-              >
-                Hoja de Ruta
-              </ButtonMenu>
-              <ButtonMenu>Mantenimiento</ButtonMenu>
-              <ButtonMenu>Partes</ButtonMenu>
+              {listApp.map((app, index) => {
+                const { name, path } = app;
+                const id = index;
+                const className = `button__${path}`;
+                return (
+                  <div key={id}>
+                    <ButtonMenu
+                      className={className}
+                      onClick={() => {
+                        handleOpenApp(className, path);
+                      }}
+                    >
+                      {name}
+                    </ButtonMenu>
+                  </div>
+                );
+              })}
             </div>
             <div className='flex justify-around'>
               <div>

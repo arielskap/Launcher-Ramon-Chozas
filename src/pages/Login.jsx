@@ -1,10 +1,10 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
+import NuevaPass from '../components/NuevaPass';
+import ForgetPass from '../components/ForgetPassContainer';
 import Logo from '../assets/static/logo_chozas2.png';
 import '../assets/styles/Login.scss';
-//import NuevaPass from '../components/NuevaPass';
-import ForgetPass from '../components/ForgetPassContainer';
 
 const Home = () => {
   const handleCloseApp = () => {
@@ -19,14 +19,15 @@ const Home = () => {
         </div>
         <div className='div__forms'>
           <Switch>
-            <Route exact path='/'>
+            <Route exact path='/form'>
+              <FormContainer />
+            </Route>
+            <Route path='/form/olvido'>
               <ForgetPass />
             </Route>
-            <Switch>
-              <Route exact path='/expired'>
-                <FormContainer />
-              </Route>
-            </Switch>
+            <Route path='/form/expired'>
+              <NuevaPass />
+            </Route>
           </Switch>
         </div>
         <div>

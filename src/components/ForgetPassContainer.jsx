@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import '../assets/styles/ForgetPass.scss';
+import React, { useState, useEffect } from 'react';
+import animateCSS from '../funciones';
 import ForgetPassDetails from './ForgetPassDetails';
 
 const ForgetPassContainer = () => {
@@ -20,11 +20,20 @@ const ForgetPassContainer = () => {
     alert('Se envio(?');
   };
 
+  const handleCloseModal = () => {
+    animateCSS('.Modal__container', 'slideOutUp faster', () => {
+      // eslint-disable-next-line no-use-before-define
+      setModalIsOpen(false);
+    });
+    animateCSS('.Modal', 'fadeOut faster');
+  };
+
   const handleNextPage = (e) => {
     e.preventDefault();
     // eslint-disable-next-line no-use-before-define
     setData({
-      title: 'Paso 2 - Confirmar',
+      title: 'Confirmar',
+      step: 2,
       hasSupervisor: true,
       buttonText: 'Restaurar',
       handleSubmit,
@@ -32,34 +41,37 @@ const ForgetPassContainer = () => {
   };
 
   const [data, setData] = useState({
-    title: 'Paso 1 - Solicitud de Supervisores',
+    title: 'Solicitud de Supervisores',
+    step: 1,
     hasSupervisor: false,
     buttonText: 'Siguiente',
     handleSubmit: handleNextPage,
   });
-
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  useEffect(() => {
+    const firstModal = localStorage.getItem('firstOpen');
+    if (!firstModal) {
+      localStorage.setItem('firstOpen', true);
+      setModalIsOpen(true);
+    }
+  }, []);
   return (
-    <ForgetPassDetails title={data.title} hasSupervisor={data.hasSupervisor} buttonText={data.buttonText} handleChange={handleChange} handleSubmit={data.handleSubmit} />
+    <ForgetPassDetails
+      title={data.title}
+      step={data.step}
+      hasSupervisor={data.hasSupervisor}
+      buttonText={data.buttonText}
+      handles={
+        {
+          handleChange,
+          handleSubmit: data.handleSubmit,
+          handleCloseModal,
+        }
+      }
+      modalIsOpen={modalIsOpen}
+      setModalIsOpen={setModalIsOpen}
+    />
   );
 };
 
 export default ForgetPassContainer;
-/*
-<h2>Paso 2 - Confirmar </h2>
-        <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='username'>
-          Usuario:
-          <input onChange={handleChange2} className='mt-1 h-10 shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline' autoComplete='username' type='text' name='username' id='username' placeholder='Ingresar Usuario' />
-        </label>
-        <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='dni'>
-          DNI:
-          <input onChange={handleChange2} className='mt-1 h-10 shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline' autoComplete='dni' type='text' name='dni' id='dni' placeholder='Ingrese el DNI' />
-        </label>
-
-        <div className='flex items-center justify-center'>
-          <button type='submit' id='prevBtn' className='button_submit_Form bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline opacity-50 cursor-not-allowed'>Restaurar</button>
-        </div>
-      </div>
-      <div id='circles' className='flex item-center justify-center pt-6'>
-        <span className='step1' />
-        <span className='step2' />
-      </div>*/
