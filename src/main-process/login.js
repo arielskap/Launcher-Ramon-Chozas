@@ -2,153 +2,180 @@
 const fs = require('fs');
 const crypto = require('crypto');
 const yauzl = require('yauzl');
-const { requestGET, requestGETFile } = require('./requestSV');
+const { requestGETFile } = require('./requestSV');
 
 const _HOSTNAME_ = 'www.dynamicdoc.com.ar';
 const _PATH_ZIP_ = '/node/build/installer';
 
-function getZIPServer(appName, pathFileZIP) {
-
-  const options = {
-    hostname: _HOSTNAME_,
-    //path: `${_PATH_ZIP_}/${appName}`,
-    path: `${_PATH_ZIP_}`,
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  };
-
+function getZIPServer(appName, pathFileZIP, nameFileZIP) {
   return new Promise((resolve, reject) => {
 
-    requestGETFile(pathFileZIP, options, (resultRequest, error) => {
+    const options = {
+      hostname: _HOSTNAME_,
+      path: `${_PATH_ZIP_}/${appName}`,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    };
+
+    requestGETFile(`${pathFileZIP}/${nameFileZIP}`, options, (resultRequest, error) => {
       if (error) {
-        console.error(`ERROR PETICION = 
-                        ${error}`);
+        console.error(`ERROR PETICION = ${error}`);
         // eslint-disable-next-line prefer-promise-reject-errors
-        reject(false);
+        return reject({ code: 500, message: 'Error Interno.', body: 'getZIPServer-open' });
       }
-      resolve(true);
+      return resolve({ code: 200, message: 'success_getZIPServer', body: '' });
     });
 
   }).then((result) => {
     return result;
   }).catch((err) => {
     console.error(err);
-  });
-}
-
-function getDependencies(appName) {
-
-  const options = {
-    hostname: _HOSTNAME_,
-    path: `${_PATH_UPDATE_}/${appName}`,
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-  };
-
-  requestGET(options, (parsedData, error) => {
-    if (error) {
-      console.error(`ERROR PETICION = 
-                      ${error}`);
-      return 0;
-    }
-
-    console.log(appName);
-    return 1;
-
+    return { error };
   });
 }
 
 function descompressZIP(pathFile) {
-  yauzl.open(pathFile, { lazyEntries: true }, (err, zipfile) => {
-    if (err) throw err;
-    zipfile.readEntry();
-    zipfile.on('entry', (entry) => {
-      if (/\/$/.test(entry.fileName)) {
-        // Directory file names end with '/'.
-        // Note that entires for directories themselves are optional.
-        // An entry's fileName implicitly requires its parent directories to exist.
-        zipfile.readEntry();
-      } else {
-        // file entry
-        zipfile.openReadStream(entry, (err, readStream) => {
-          if (err) throw err;
-          readStream.on('end', () => {
-            zipfile.readEntry();
+  return new Promise((resolve, reject) => {
+
+    console.log(pathFile);
+    yauzl.open(pathFile, { lazyEntries: true }, (err, zipfile) => {
+      if (err) {
+        console.error(`ERROR YAUZL= ${err}`);
+        // eslint-disable-next-line prefer-promise-reject-errors
+        return reject({ code: 500, message: 'Error Interno.', body: 'descompressZIP-open' });
+      };
+      zipfile.readEntry();
+      zipfile.on('entry', (entry) => {
+        if (/\/$/.test(entry.fileName)) {
+          zipfile.readEntry();
+        } else {
+          zipfile.openReadStream(entry, (err, readStream) => {
+            if (err) {
+              console.error(`ERROR zipfile= ${err}`);
+              return reject({ code: 500, message: 'Error Interno.', body: 'descompressZIP-openReadStream' });
+            };
+            readStream.on('end', () => {
+              zipfile.readEntry();
+            });
+            const writeStream = fs.createWriteStream(`C:/${entry.fileName}`);
+            readStream.pipe(writeStream);
           });
-          console.error(entry);
-          const writeStream = fs.createWriteStream(entry.fileName);
-          readStream.pipe(writeStream);
-        });
-      }
+        }
+      });
+      zipfile.on('close', (entry) => {
+        return resolve({ code: 200, message: 'success_descompressZIP', body: '' });
+      });
     });
+  }).then((result) => {
+    return result;
+  }).catch((err) => {
+    return err;
   });
 }
 
-function validVersion(appPath, versionServer) {
+function validVersion(appPath, appExe, versionServer) {
 
   return new Promise((resolve, reject) => {
+
+    const app = `${appPath}/${appExe}`;
+
+    if (!fs.existsSync(appPath)) {
+      fs.mkdirSync(appPath);
+      return resolve('sin_carpeta');
+    }
+    if (!fs.existsSync(app)) {
+      return resolve('sin_exe');
+    }
     const hash = crypto.createHash('md5');
-    const stream = fs.createReadStream(appPath);
+    const stream = fs.createReadStream(app);
     stream.on('error', (err) => reject(err));
     stream.on('data', (chunk) => hash.update(chunk));
     stream.on('end', () => resolve(hash.digest('hex')));
   })
     .then((versionLocal) => {
-      return versionLocal === versionServer;
+      return { code: 200, message: 'success_validVersion', body: versionLocal === versionServer };
     }).catch((err) => {
       console.error(err);
+      return { code: 500, message: 'Error Interno.', body: 'validVersion-end' };
     });
 }
 
-/**
- *
- * @param {event} event Es el evento que recibos del FRONT, para asi poder responderlo
- * @param {JSON} parsedData Es toda la informacion que recibimos del servidor
- * @return {JSON} Retorna un JSON con todas las aplicaciones a las cuales puede acceder el usuario
- */
-function login(event, parsedData) {
+function login(listAPP) {
 
   return new Promise((resolve, reject) => {
 
-    if (parsedData.code !== 200 || !parsedData.user.list_app) {
-      event.reply('reply-login-launcher', {
-        code: parsedData.code,
-        message: parsedData.message,
-      });
-      return reject(parsedData.code);
-    }
+    const bufferListAPP = [];
 
-    const listAPP = [];
+    listAPP.forEach(async (element) => {
+      const resultValidVersion = await validVersion(element.path, element.exe, element.hashServidor);
 
-    parsedData.user.list_app.forEach(async (element) => {
-      const resultValidVersion = await validVersion(element.app_path, element.versionServer);
-      listAPP.push({
-        app_name: element.app_name,
-        app_path: element.app_path,
+      if (resultValidVersion.code === 500) {
+        bufferListAPP.push({
+          name: element.name,
+          isRun: false,
+          isError: true,
+          message: 'APP no instalada',
+        });
+        return;
+      }
+
+      if (resultValidVersion.body) {
+        bufferListAPP.push({
+          name: element.name,
+          path: element.path,
+          exe: element.exe,
+          isRun: false,
+          message: 'APP OK',
+        });
+        return;
+      }
+
+      const resultGetZIP = await getZIPServer(element.name, element.path, element.zip);
+
+      if (resultGetZIP.code === 500) {
+        bufferListAPP.push({
+          name: element.name,
+          path: element.path,
+          exe: element.exe,
+          isRun: false,
+          message: 'Error ZIP_SV',
+        });
+        return;
+      }
+
+      /*
+      const resultDescompressZIP = await descompressZIP(`${element.path}/${element.zip}`);
+
+      if (resultDescompressZIP.code === 500) {
+        bufferListAPP.push({
+          name: element.name,
+          path: element.path,
+          exe: element.exe,
+          isRun: false,
+          message: 'Error ZIP_DESC',
+        });
+      }
+      */
+
+      bufferListAPP.push({
+        name: element.name,
+        path: element.path,
+        exe: element.exe,
         isRun: false,
-        isUpdate: resultValidVersion,
+        message: 'APP Actualizada',
       });
-
-      if (resultValidVersion) {
-        return;
-      }
-      const resultGetZIP = await getZIPServer(element.app_name, `C:/chozassa_v2/${element.app_name}.zip`);
-      if (!resultGetZIP) {
-        return;
-      }
-      //descompressZIP(`C:/chozassa_v2/${element.app_name}.zip`);
-      descompressZIP('C:/prueba/hola_zip.zip');
 
     });
 
-    event.reply('reply-login-launcher', parsedData);
-    resolve(listAPP);
+    return resolve({ code: 200, message: 'success', body: listAPP });
 
+  }).then((result) => {
+    return result;
+  }).catch((err) => {
+    return err;
   });
 }
 
-module.exports = { login, getDependencies };
+module.exports = { login };

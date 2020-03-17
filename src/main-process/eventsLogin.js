@@ -36,23 +36,27 @@ ipcMain.on('login-launcher', (event, argsJSON) => {
     },
   };
 
-  requestPOST(postData, options, (parsedData, error) => {
+  requestPOST(postData, options, async (parsedData, error) => {
 
     if (error) {
-      console.error(`ERROR PETICION = 
-                      ${error}`);
-      event.reply('reply-login-launcher', { code: 500, message: 'Error Interno' });
+      console.error(`ERROR PETICION = ${error}`);
+      event.reply('reply-login-launcher', { code: 500, message: 'Error Server.' });
+      return 0;
+    }
+
+    if (!parsedData.list_app || parsedData.list_app.length < 1) {
+      console.error(`ERROR PETICION = ${error}`);
+      event.reply('reply-login-launcher', { code: parsedData.code, message: parsedData.message, user: parsedData.user, list_app: null });
       return 1;
     }
 
-    login(event, parsedData).then((element) => {
-      _LIST_APP_FOR_USER = element;
-      return 0;
-    }).catch((err) => {
-      console.log(err);
-      return 1;
-    });
+    const resutlLogin = await login(parsedData.list_app);
 
+    if (resutlLogin.code === 500) {
+      return event.reply('reply-login-launcher', { code: resutlLogin.code, message: resutlLogin.message });
+    }
+    _LIST_APP_FOR_USER = resutlLogin.body;
+    event.reply('reply-login-launcher', { code: parsedData.code, message: parsedData.message, user: parsedData.user, list_app: resutlLogin.body });
   });
 
 });

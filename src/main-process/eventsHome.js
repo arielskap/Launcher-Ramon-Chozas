@@ -11,7 +11,7 @@ ipcMain.on('open-app', (event, appName) => {
     return event.reply('reply-open-app', { code: 400, message: 'Usuario no logeado', appName });
   }
 
-  const oneAPP = _LIST_APP_FOR_USER.find((rowAPP) => rowAPP.app_name === appName);
+  const oneAPP = _LIST_APP_FOR_USER.find((rowAPP) => rowAPP.name === appName);
 
   if (!oneAPP) {
     return event.reply('reply-open-app', { code: 400, type: 'local', message: 'Sin Privilegios', appName });
@@ -23,24 +23,24 @@ ipcMain.on('open-app', (event, appName) => {
 
   try {
 
-    if (!fs.existsSync(oneAPP.app_path)) {
+    if (!fs.existsSync(oneAPP.path)) {
       return event.reply('reply-open-app', { code: 400, type: 'local', message: 'APP no instalada', appName });
     }
 
-    const ls = child.spawn(oneAPP.app_path);
+    const ls = child.spawn(`${oneAPP.path}/${oneAPP.exe}`);
 
     ls.on('close', (code) => {
       _LIST_APP_FOR_USER.forEach((element) => {
-        if (element.app_name === oneAPP.app_name) {
+        if (element.name === oneAPP.name) {
           // eslint-disable-next-line no-param-reassign
           element.isRun = false;
-          return event.reply('reply-close-app', { code: 200, message: 'APP cerrada', app_name: oneAPP.app_name });
+          return event.reply('reply-close-app', { code: 200, message: 'APP cerrada', name: oneAPP.name });
         };
       });
     });
 
     _LIST_APP_FOR_USER.forEach((element) => {
-      if (element.app_name === oneAPP.app_name) {
+      if (element.name === oneAPP.name) {
         // eslint-disable-next-line no-param-reassign
         element.isRun = true;
       }
@@ -51,7 +51,7 @@ ipcMain.on('open-app', (event, appName) => {
   } catch (error) {
     console.error(`ERROR PETICION = 
                       ${error}`);
-    return event.reply('reply-close-app', { code: 500, message: 'Error al ejecutar APP', app_name: oneAPP.app_name });
+    return event.reply('reply-close-app', { code: 500, message: 'Error al ejecutar APP', name: oneAPP.name });
   }
 
 });
