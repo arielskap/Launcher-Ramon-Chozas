@@ -1,22 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import ExitModal from './ExitModal';
+import Form from './Form';
 import '../assets/styles/Form.scss';
 import ver from '../assets/static/ver.svg';
+import Input from './Input';
 
 const FormDetails = ({ information, modalIsOpen, handles }) => {
   const { handleCloseModal, handlePasswordExpired, handleSubmit, handleSwitchVisiblePass } = handles;
   return (
     <>
-      <form className='Form shadow-md rounded px-8 pt-6 pb-8 mb-4 animated fadeIn' onSubmit={handleSubmit}>
-        <Link to='/home'>
-          Go to Home
-        </Link>
+      <Form handleSubmit={handleSubmit}>
+        <div className='flex justify-around'>
+          <Link to='/home'>
+            Go to Home
+          </Link>
+          <Link to='/form/expired'>
+            Go to Expired pass
+          </Link>
+        </div>
         <div className='mb-4'>
-          <label className='block text-gray-700 text-sm font-bold mb-2' htmlFor='username'>
-            Usuario:
-            <input autoComplete='username' className='mt-1 h-10 shadow appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline' name='username' id='username' type='text' placeholder='Ingrese Usuario' tabIndex={0} />
-          </label>
+          <Input id='username' placeholder='Ingrese Usuario' type='text'>Usuario:</Input>
         </div>
         <div className='mb-6'>
           <label className='block text-gray-700 text-sm font-bold mb-2 relative' htmlFor='password'>
@@ -38,9 +42,9 @@ const FormDetails = ({ information, modalIsOpen, handles }) => {
           </button>
         </div>
         <div className='pt-5 text-right'>
-          <button type='button' className='text-gray-600 text-xs italic hover:text-blue-600 py-4' tabIndex={0}>¿Olvidó su contraseña?</button>
+          <Link to='/form/olvido' className='text-gray-600 text-xs italic hover:text-blue-600 py-4' tabIndex={0}>¿Olvidó su contraseña?</Link>
         </div>
-      </form>
+      </Form>
       <ExitModal isOpen={modalIsOpen} onCloseModal={handleCloseModal} onConfirm={handlePasswordExpired}>⚠ ¡Se vencio la constraseña! ⚠</ExitModal>
     </>
   );

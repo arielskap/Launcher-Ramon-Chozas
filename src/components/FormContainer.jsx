@@ -34,7 +34,6 @@ const FormContainer = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     document.body.classList.add('cursor-wait');
     document.querySelector('.button_submit_Form').setAttribute('disabled', '');
     document.querySelector('.button_submit_Form').classList.add('opacity-50', 'cursor-not-allowed');
@@ -65,9 +64,15 @@ const FormContainer = () => {
   useEffect(() => {
     document.getElementById('username').focus();
     ipcRenderer.on('reply-login-launcher', (event, argsJSON) => {
-      const { message, code } = argsJSON;
+      const { message, code, user } = argsJSON;
+      const listApp = argsJSON.list_app;
       const username = document.querySelector('#username');
       const password = document.querySelector('#password');
+      if (user) {
+        const { firstName, lastName } = user;
+        const usuario = { firstName, lastName, listApp };
+        localStorage.setItem('user', JSON.stringify(usuario));
+      }
       document.body.classList.remove('cursor-wait');
       if (code === 200) {
         animateCSS('.Login', 'fadeOut faster', () => {

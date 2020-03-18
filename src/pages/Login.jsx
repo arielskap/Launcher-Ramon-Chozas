@@ -1,6 +1,8 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
 import FormContainer from '../components/FormContainer';
+import NuevaPass from '../components/NuevaPass';
+import ForgetPass from '../components/ForgetPassContainer';
 import Logo from '../assets/static/logo_chozas2.png';
 import '../assets/styles/Login.scss';
 
@@ -17,15 +19,14 @@ const Home = () => {
         </div>
         <div className='div__forms'>
           <Switch>
-            <Route exact path='/'>
+            <Route exact path='/form'>
               <FormContainer />
             </Route>
-            <Route path='/expired'>
-              <div>
-                <h1>
-                  from fantasma
-                </h1>
-              </div>
+            <Route path='/form/olvido'>
+              <ForgetPass />
+            </Route>
+            <Route path='/form/expired'>
+              <NuevaPass />
             </Route>
           </Switch>
         </div>

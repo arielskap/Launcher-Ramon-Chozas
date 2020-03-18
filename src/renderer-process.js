@@ -24,7 +24,7 @@ export function forget() {
 };
 
 export function expired() {
-  ipcRenderer.send('expired-password', { userName: input_userNameExpired.value, password: input_passwordExpired.value, newPassword: input_newPasswordExpired.value, confirmPassword: input_confirmPasswordExpired.value });
+  ipcRenderer.send('expired-password', { userName: username.value, password: password.value, newPassword: newPassword.value, confirmPassword: confirmNewPassword.value });
 };
 
 /*
