@@ -38,11 +38,9 @@ function getZIPServer(appName, pathFileZIP, nameFileZIP) {
 
 function descompressZIP(pathFile) {
   return new Promise((resolve, reject) => {
-
-    console.log(pathFile);
-    yauzl.open(pathFile, { lazyEntries: true }, (err, zipfile) => {
+    yauzl.open('C:/hr/hoja_de_ruta_lts.zip', { lazyEntries: true }, (err, zipfile) => {
       if (err) {
-        console.error(`ERROR YAUZL= ${err}`);
+        console.error(`ERROR YAUZL= ${err} --- ${pathFile}`);
         // eslint-disable-next-line prefer-promise-reject-errors
         return reject({ code: 500, message: 'Error Interno.', body: 'descompressZIP-open' });
       };
@@ -59,6 +57,8 @@ function descompressZIP(pathFile) {
             readStream.on('end', () => {
               zipfile.readEntry();
             });
+            console.error(entry.fileName);
+
             const writeStream = fs.createWriteStream(`C:/${entry.fileName}`);
             readStream.pipe(writeStream);
           });
@@ -81,12 +81,8 @@ function validVersion(appPath, appExe, versionServer) {
 
     const app = `${appPath}/${appExe}`;
 
-    if (!fs.existsSync(appPath)) {
-      fs.mkdirSync(appPath);
-      return resolve('sin_carpeta');
-    }
-    if (!fs.existsSync(app)) {
-      return resolve('sin_exe');
+    if (!fs.existsSync(appPath) || !fs.existsSync(app)) {
+      return { code: 400, message: 'APP No Instalada', body: true };
     }
     const hash = crypto.createHash('md5');
     const stream = fs.createReadStream(app);
@@ -98,25 +94,25 @@ function validVersion(appPath, appExe, versionServer) {
       return { code: 200, message: 'success_validVersion', body: versionLocal === versionServer };
     }).catch((err) => {
       console.error(err);
-      return { code: 500, message: 'Error Interno.', body: 'validVersion-end' };
+      return { code: 500, message: 'Error Interno.', body: true };
     });
 }
 
-function login(listAPP) {
+function login2(listAPP) {
 
   return new Promise((resolve, reject) => {
-
     const bufferListAPP = [];
 
     listAPP.forEach(async (element) => {
       const resultValidVersion = await validVersion(element.path, element.exe, element.hashServidor);
 
-      if (resultValidVersion.code === 500) {
+      if (resultValidVersion.code !== 200) {
         bufferListAPP.push({
           name: element.name,
+          path: element.path,
+          exe: element.exe,
           isRun: false,
-          isError: true,
-          message: 'APP no instalada',
+          message: resultValidVersion.message,
         });
         return;
       }
@@ -127,7 +123,7 @@ function login(listAPP) {
           path: element.path,
           exe: element.exe,
           isRun: false,
-          message: 'APP OK',
+          message: resultValidVersion.message,
         });
         return;
       }
@@ -140,36 +136,100 @@ function login(listAPP) {
           path: element.path,
           exe: element.exe,
           isRun: false,
-          message: 'Error ZIP_SV',
+          message: resultGetZIP.message,
         });
         return;
       }
 
-      /*
       const resultDescompressZIP = await descompressZIP(`${element.path}/${element.zip}`);
-
-      if (resultDescompressZIP.code === 500) {
-        bufferListAPP.push({
-          name: element.name,
-          path: element.path,
-          exe: element.exe,
-          isRun: false,
-          message: 'Error ZIP_DESC',
-        });
-      }
-      */
 
       bufferListAPP.push({
         name: element.name,
         path: element.path,
         exe: element.exe,
         isRun: false,
-        message: 'APP Actualizada',
+        message: resultDescompressZIP.message,
       });
 
+      console.log(bufferListAPP);
+    });
+    // ESTO ESTA MAL_____________ DEBE RETORNAR : bufferListAPP
+    // ESTO ESTA MAL_____________ DEBE RETORNAR : bufferListAPP
+    // ESTO ESTA MAL_____________ DEBE RETORNAR : bufferListAPP
+    // ESTO ESTA MAL_____________ DEBE RETORNAR : bufferListAPP
+    // ESTO ESTA MAL_____________ DEBE RETORNAR : bufferListAPP
+    // ESTO ESTA MAL_____________ DEBE RETORNAR : bufferListAPP
+    // ESTO ESTA MAL_____________ DEBE RETORNAR : bufferListAPP
+    return resolve({ code: 200, message: 'success', body: bufferListAPP });
+
+  }).then((result) => {
+    return result;
+  }).catch((err) => {
+    return err;
+  });
+}
+
+async function checkAPP(app) {
+
+  const resultValidVersion = await validVersion(app.path, app.exe, app.hashServidor);
+
+  if (resultValidVersion.code !== 200) {
+    return {
+      name: app.name,
+      path: app.path,
+      exe: app.exe,
+      isRun: false,
+      message: resultValidVersion.message,
+    };
+  }
+
+  if (resultValidVersion.body) {
+    return {
+      name: app.name,
+      path: app.path,
+      exe: app.exe,
+      isRun: false,
+      message: resultValidVersion.message,
+    };
+  }
+
+  const resultGetZIP = await getZIPServer(app.name, app.path, app.zip);
+
+  if (resultGetZIP.code === 500) {
+    return {
+      name: app.name,
+      path: app.path,
+      exe: app.exe,
+      isRun: false,
+      message: resultGetZIP.message,
+    };
+  }
+
+  const resultDescompressZIP = await descompressZIP(`${app.path}/${app.zip}`);
+
+  return {
+    name: app.name,
+    path: app.path,
+    exe: app.exe,
+    isRun: false,
+    message: resultDescompressZIP.message,
+  };
+}
+
+function login(listAPP) {
+
+  return new Promise((resolve, reject) => {
+    const bufferListAPP = [];
+    const size = listAPP.length;
+    const contador = 0;
+
+    listAPP.forEach((element) => {
+      checkAPP(element);
     });
 
-    return resolve({ code: 200, message: 'success', body: listAPP });
+    if (size === contador) {
+      resolve(bufferListAPP);
+    }
 
   }).then((result) => {
     return result;
