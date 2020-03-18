@@ -37,7 +37,8 @@ const ForgetPassContainer = () => {
   const handleOpenModal = () => {
     setModalIsOpen(true);
     setTippyVisible(false);
-  }
+  };
+
   const handleCloseModal = () => {
     animateCSS('.Modal__container', 'slideOutUp faster', () => {
       setModalIsOpen(false);
