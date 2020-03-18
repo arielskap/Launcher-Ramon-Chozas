@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 import React, { useState, useEffect } from 'react';
 import animateCSS from '../funciones';
 import ForgetPassDetails from './ForgetPassDetails';
@@ -33,9 +34,12 @@ const ForgetPassContainer = () => {
     alert('Se envio(?');
   };
 
+  const handleOpenModal = () => {
+    setModalIsOpen(true);
+    setTippyVisible(false);
+  }
   const handleCloseModal = () => {
     animateCSS('.Modal__container', 'slideOutUp faster', () => {
-      // eslint-disable-next-line no-use-before-define
       setModalIsOpen(false);
     });
     animateCSS('.Modal', 'fadeOut faster');
@@ -43,7 +47,6 @@ const ForgetPassContainer = () => {
 
   const handleNextPage = (e) => {
     e.preventDefault();
-    // eslint-disable-next-line no-use-before-define
     setData({
       title: 'Confirmar',
       step: 2,
@@ -67,10 +70,13 @@ const ForgetPassContainer = () => {
     handleChange,
   });
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [tippyVisible, setTippyVisible] = useState(true);
+
   useEffect(() => {
     const firstModal = localStorage.getItem('firstOpen');
     if (!firstModal) {
       localStorage.setItem('firstOpen', true);
+      setTippyVisible(false);
       setModalIsOpen(true);
     }
   }, []);
@@ -84,11 +90,12 @@ const ForgetPassContainer = () => {
         {
           handleChange: data.handleChange,
           handleSubmit: data.handleSubmit,
+          handleOpenModal,
           handleCloseModal,
         }
       }
       modalIsOpen={modalIsOpen}
-      setModalIsOpen={setModalIsOpen}
+      tippyVisible={tippyVisible}
     />
   );
 };

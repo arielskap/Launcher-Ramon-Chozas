@@ -1,14 +1,16 @@
 import React from 'react';
+import Tippy from '@tippyjs/react';
 import Form from './Form';
 import BackToLogin from './BackToLogin';
 import InformationModal from './InformationModal';
 import '../assets/styles/ForgetPass.scss';
 import info from '../assets/static/info.svg';
 import Input from './Input';
+import 'tippy.js/dist/tippy.css';
 
 /*onChange={handleChange}*/
-const ForgetPassDetails = ({ title, step, hasSupervisor, buttonText, handles, modalIsOpen, setModalIsOpen }) => {
-  const { handleChange, handleSubmit, handleCloseModal } = handles;
+const ForgetPassDetails = ({ title, step, hasSupervisor, buttonText, handles, modalIsOpen, tippyVisible }) => {
+  const { handleChange, handleSubmit, handleCloseModal, handleOpenModal } = handles;
 
   return (
     <>
@@ -16,9 +18,11 @@ const ForgetPassDetails = ({ title, step, hasSupervisor, buttonText, handles, mo
         <div className='tab'>
           <div className='flex justify-around'>
             <BackToLogin />
-            <button type='button' onClick={() => setModalIsOpen(true)}>
-              <img className='object-contain h-full w-6' src={info} alt='Información' />
-            </button>
+            <Tippy content='Información' visible={tippyVisible} placement='right'>
+              <button type='button' onClick={handleOpenModal}>
+                <img className='object-contain h-full w-6' src={info} alt='Información' />
+              </button>
+            </Tippy>
           </div>
           <div className='mt-4 text-center'>
             <div>
