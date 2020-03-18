@@ -63,7 +63,7 @@ const Home = () => {
   }, []);
 
   const { firstName, lastName, listApp } = JSON.parse(localStorage.getItem('user'));
-  console.log(listApp)
+  console.log(listApp);
   return (
     <section className='Home p-4 h-full w-full flex flex-col animated fadeIn text-white'>
       <div className='Home__header flex items-center justify-between'>
