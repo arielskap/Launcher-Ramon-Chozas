@@ -3,6 +3,7 @@ import animateCSS from '../funciones';
 import ForgetPassDetails from './ForgetPassDetails';
 
 const ForgetPassContainer = () => {
+
   const handleChange = () => {
     if (document.querySelector('#username').value && document.querySelector('#dni').value) {
       document.querySelector('#btnForm').classList.remove('opacity-50', 'cursor-not-allowed');
@@ -38,6 +39,10 @@ const ForgetPassContainer = () => {
       buttonText: 'Restaurar',
       handleSubmit,
     });
+    document.querySelector('.step1').classList.replace('bg-gray-700', 'bg-gray-500');
+    document.querySelector('.step2').classList.replace('bg-gray-500', 'bg-gray-700');
+    document.querySelector('#btnForm').setAttribute('disabled', '');
+    document.querySelector('#btnForm').classList.add('opacity-50', 'cursor-not-allowed');
   };
 
   const [data, setData] = useState({
