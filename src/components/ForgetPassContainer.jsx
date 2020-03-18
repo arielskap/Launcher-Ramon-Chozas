@@ -16,6 +16,18 @@ const ForgetPassContainer = () => {
     }
   };
 
+  const handleChangeNext = () => {
+    if (document.querySelector('#supervisor').value && document.querySelector('#username').value && document.querySelector('#dni').value) {
+      document.querySelector('#btnForm').classList.remove('opacity-50', 'cursor-not-allowed');
+      document.querySelector('#btnForm').removeAttribute('disabled');
+    } else {
+      if (!document.querySelector('#btnForm').hasAttribute('disabled')) {
+        document.querySelector('#btnForm').setAttribute('disabled', '');
+        document.querySelector('#btnForm').classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     alert('Se envio(?');
@@ -38,6 +50,7 @@ const ForgetPassContainer = () => {
       hasSupervisor: true,
       buttonText: 'Restaurar',
       handleSubmit,
+      handleChange: handleChangeNext,
     });
     document.querySelector('.step1').classList.replace('bg-gray-700', 'bg-gray-500');
     document.querySelector('.step2').classList.replace('bg-gray-500', 'bg-gray-700');
@@ -51,6 +64,7 @@ const ForgetPassContainer = () => {
     hasSupervisor: false,
     buttonText: 'Siguiente',
     handleSubmit: handleNextPage,
+    handleChange,
   });
   const [modalIsOpen, setModalIsOpen] = useState(false);
   useEffect(() => {
@@ -68,7 +82,7 @@ const ForgetPassContainer = () => {
       buttonText={data.buttonText}
       handles={
         {
-          handleChange,
+          handleChange: data.handleChange,
           handleSubmit: data.handleSubmit,
           handleCloseModal,
         }

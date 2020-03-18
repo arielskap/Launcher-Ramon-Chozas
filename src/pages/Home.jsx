@@ -89,9 +89,9 @@ const Home = () => {
               {listApp.map((app, index) => {
                 const { name, path } = app;
                 const id = index;
-                const className = `button__${path}`;
+                const className = `button__${name}`;
                 return (
-                  <div key={id}>
+                  <div className='w-full' key={id}>
                     <ButtonMenu
                       className={className}
                       onClick={() => {
