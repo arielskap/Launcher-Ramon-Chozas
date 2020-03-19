@@ -5,11 +5,10 @@ const yauzl = require('yauzl');
 const { requestGETFile } = require('./requestSV');
 
 const _HOSTNAME_ = 'www.dynamicdoc.com.ar';
-const _PATH_ZIP_ = '/node/build/installer';
+const _PATH_ZIP_ = '/node/build/upgrade';
 
 function getZIPServer(appName, pathFileZIP, nameFileZIP) {
   return new Promise((resolve, reject) => {
-
     const options = {
       hostname: _HOSTNAME_,
       path: `${_PATH_ZIP_}/${appName}`,
@@ -38,17 +37,18 @@ function getZIPServer(appName, pathFileZIP, nameFileZIP) {
 
 function descompressZIP(pathFile) {
   return new Promise((resolve, reject) => {
-
-    console.log(pathFile);
     yauzl.open(pathFile, { lazyEntries: true }, (err, zipfile) => {
       if (err) {
-        console.error(`ERROR YAUZL= ${err}`);
+        console.error(`ERROR YAUZL= ${err} --- ${pathFile}`);
         // eslint-disable-next-line prefer-promise-reject-errors
         return reject({ code: 500, message: 'Error Interno.', body: 'descompressZIP-open' });
       };
       zipfile.readEntry();
       zipfile.on('entry', (entry) => {
         if (/\/$/.test(entry.fileName)) {
+          if (!fs.existsSync(`C:/${entry.fileName}`)) {
+            fs.mkdirSync(`C:/${entry.fileName}`);
+          }
           zipfile.readEntry();
         } else {
           zipfile.openReadStream(entry, (err, readStream) => {
@@ -59,13 +59,14 @@ function descompressZIP(pathFile) {
             readStream.on('end', () => {
               zipfile.readEntry();
             });
+
             const writeStream = fs.createWriteStream(`C:/${entry.fileName}`);
             readStream.pipe(writeStream);
           });
         }
       });
       zipfile.on('close', (entry) => {
-        return resolve({ code: 200, message: 'success_descompressZIP', body: '' });
+        return resolve({ code: 200, message: 'APP Actualizada', body: '' });
       });
     });
   }).then((result) => {
@@ -77,17 +78,13 @@ function descompressZIP(pathFile) {
 
 function validVersion(appPath, appExe, versionServer) {
 
+  const app = `${appPath}/${appExe}`;
+
+  if (!fs.existsSync(appPath) || !fs.existsSync(app)) {
+    return { code: 400, message: 'APP No Instalada', body: true };
+  }
+
   return new Promise((resolve, reject) => {
-
-    const app = `${appPath}/${appExe}`;
-
-    if (!fs.existsSync(appPath)) {
-      fs.mkdirSync(appPath);
-      return resolve('sin_carpeta');
-    }
-    if (!fs.existsSync(app)) {
-      return resolve('sin_exe');
-    }
     const hash = crypto.createHash('md5');
     const stream = fs.createReadStream(app);
     stream.on('error', (err) => reject(err));
@@ -98,84 +95,71 @@ function validVersion(appPath, appExe, versionServer) {
       return { code: 200, message: 'success_validVersion', body: versionLocal === versionServer };
     }).catch((err) => {
       console.error(err);
-      return { code: 500, message: 'Error Interno.', body: 'validVersion-end' };
+      return { code: 500, message: 'Error Interno.', body: true };
     });
 }
 
-function login(listAPP) {
+async function checkAPP(app) {
 
-  return new Promise((resolve, reject) => {
+  const resultValidVersion = await validVersion(app.path, app.exe, app.hashServidor);
 
-    const bufferListAPP = [];
+  if (resultValidVersion.code !== 200) {
+    return {
+      name: app.name,
+      path: app.path,
+      exe: app.exe,
+      message: resultValidVersion.message,
+      isRun: false,
+    };
+  }
 
-    listAPP.forEach(async (element) => {
-      const resultValidVersion = await validVersion(element.path, element.exe, element.hashServidor);
+  if (resultValidVersion.body) {
+    return {
+      name: app.name,
+      path: app.path,
+      exe: app.exe,
+      message: resultValidVersion.message,
+      isRun: false,
+    };
+  }
 
-      if (resultValidVersion.code === 500) {
-        bufferListAPP.push({
-          name: element.name,
-          isRun: false,
-          isError: true,
-          message: 'APP no instalada',
-        });
-        return;
-      }
+  const resultGetZIP = await getZIPServer(app.name, app.path, app.zip);
 
-      if (resultValidVersion.body) {
-        bufferListAPP.push({
-          name: element.name,
-          path: element.path,
-          exe: element.exe,
-          isRun: false,
-          message: 'APP OK',
-        });
-        return;
-      }
+  if (resultGetZIP.code === 500) {
+    return {
+      name: app.name,
+      path: app.path,
+      exe: app.exe,
+      message: resultGetZIP.message,
+      isRun: false,
+    };
+  }
 
-      const resultGetZIP = await getZIPServer(element.name, element.path, element.zip);
+  const resultDescompressZIP = await descompressZIP(`${app.path}/${app.zip}`);
 
-      if (resultGetZIP.code === 500) {
-        bufferListAPP.push({
-          name: element.name,
-          path: element.path,
-          exe: element.exe,
-          isRun: false,
-          message: 'Error ZIP_SV',
-        });
-        return;
-      }
+  return {
+    name: app.name,
+    path: app.path,
+    exe: app.exe,
+    message: resultDescompressZIP.message,
+    isRun: false,
+  };
 
-      /*
-      const resultDescompressZIP = await descompressZIP(`${element.path}/${element.zip}`);
+}
 
-      if (resultDescompressZIP.code === 500) {
-        bufferListAPP.push({
-          name: element.name,
-          path: element.path,
-          exe: element.exe,
-          isRun: false,
-          message: 'Error ZIP_DESC',
-        });
-      }
-      */
+async function login(array) {
+  const bufferList = [];
 
-      bufferListAPP.push({
-        name: element.name,
-        path: element.path,
-        exe: element.exe,
-        isRun: false,
-        message: 'APP Actualizada',
-      });
+  // -----------------------NO OLVIDAR--------------------
+  // ESTE ERROR PUEDE GENERAR QUE TARDE MUCHO LA APLICACION,
+  // YA QUE ESPERA POR CADA ITERACION
+  // SI DEFINO VARIAS PROMESAS, PUEDO SOLVENTAR ESTO
+  for (const item of array) {
+    const buffer = await checkAPP(item);
+    bufferList.push(buffer);
+  };
 
-    });
-
-    return resolve({ code: 200, message: 'success', body: listAPP });
-
-  }).then((result) => {
-    return result;
-  }).catch((err) => {
-    return err;
-  });
+  return bufferList;
 }
 
 module.exports = { login };
