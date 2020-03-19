@@ -16,6 +16,7 @@ const _PATH_EXPIRED_ = '/node/build/expired';
  * En el JSON debe recibir USERNAME y PASSWORD
  */
 ipcMain.on('login-launcher', (event, argsJSON) => {
+
   if (!argsJSON.userName || argsJSON.userName === undefined) {
     return event.reply('reply-login-launcher', { code: 401, type: 'local', message: 'Ingrese Usuario' });
   }
@@ -50,13 +51,8 @@ ipcMain.on('login-launcher', (event, argsJSON) => {
       return 1;
     }
 
-    const resutlLogin = await login(parsedData.list_app);
-
-    if (resutlLogin.code === 500) {
-      return event.reply('reply-login-launcher', { code: resutlLogin.code, message: resutlLogin.message });
-    }
-    _LIST_APP_FOR_USER = resutlLogin.body;
-    event.reply('reply-login-launcher', { code: parsedData.code, message: parsedData.message, user: parsedData.user, list_app: resutlLogin.body });
+    _LIST_APP_FOR_USER = await login(parsedData.list_app);
+    event.reply('reply-login-launcher', { code: parsedData.code, message: parsedData.message, user: parsedData.user, list_app: _LIST_APP_FOR_USER });
   });
 
 });

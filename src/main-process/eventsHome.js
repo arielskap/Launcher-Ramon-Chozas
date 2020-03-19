@@ -67,3 +67,14 @@ ipcMain.on('logout-launcher', (event) => {
     message: 'Sesion Cerrada',
   });
 });
+
+/**
+ * EVENT
+ * Redefine la lista de APP por usuario cuando cierra la sesion.
+ */
+ipcMain.on('install-app', (event) => {
+  return event.reply('reply-install-app', {
+    code: 200,
+    message: 'Instalada',
+  });
+});
