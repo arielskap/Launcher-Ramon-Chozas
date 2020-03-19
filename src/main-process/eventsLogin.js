@@ -1,7 +1,6 @@
 const { ipcMain } = require('electron');
 const os = require('os');
 const querystring = require('querystring');
-const { MyEmitter } = require('./myEvents');
 const { requestPOST } = require('./requestSV');
 const { login } = require('./login');
 
@@ -52,10 +51,8 @@ ipcMain.on('login-launcher', (event, argsJSON) => {
       return 1;
     }
 
-    const resutlLogin = await login(parsedData.list_app);
-
-    _LIST_APP_FOR_USER = resutlLogin;
-    event.reply('reply-login-launcher', { code: parsedData.code, message: parsedData.message, user: parsedData.user, list_app: resutlLogin });
+    _LIST_APP_FOR_USER = await login(parsedData.list_app);
+    event.reply('reply-login-launcher', { code: parsedData.code, message: parsedData.message, user: parsedData.user, list_app: _LIST_APP_FOR_USER });
   });
 
 });

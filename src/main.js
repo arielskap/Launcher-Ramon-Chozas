@@ -1,15 +1,14 @@
 /* eslint-disable no-unused-vars */
 const { app, BrowserWindow } = require('electron');
-const eventsHome = require('./main-process/eventsHome.js');
-const eventsLogin = require('./main-process/eventsLogin.js');
-
-const _LIST_APP_FOR_USER = [];
-const _LIST_SUPERVISOR_FOR_USER = [];
+//const eventsHome = require('./main-process/eventsHome.js');
+//const eventsLogin = require('./main-process/eventsLogin.js');
+const eventsMasterful = require('./main-process/eventsMasterful.js');
 
 let win;
 
 app.allowRendererProcessReuse = true;
-app.whenReady().then((eventsHome, eventsLogin) => {
+//app.whenReady().then((eventsHome, eventsLogin) => {
+app.whenReady().then((eventsMasterful) => {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
