@@ -52,10 +52,12 @@ const Home = () => {
 
   useEffect(() => {
     ipcRenderer.on('reply-open-app', (event, argsJSON) => {
+      console.table(argsJSON);
       document.body.classList.remove('cursor-wait');
     });
 
     ipcRenderer.on('reply-close-app', (event, argsJSON) => {
+      console.table(argsJSON);
       queryElement.removeAttribute('disabled');
       queryElement.classList.add('bg-transparent', 'text-white-700', 'border-blue-500');
       queryElement.classList.remove('bg-blue-500', 'text-white', 'border-transparent');

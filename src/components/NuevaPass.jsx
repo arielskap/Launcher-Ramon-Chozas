@@ -56,6 +56,7 @@ const NuevaPass = () => {
 
   useEffect(() => {
     ipcRenderer.on('reply-expired-password', (event, argsJSON) => {
+      console.table(argsJSON);
       document.getElementById('username').focus();
       const { message, code } = argsJSON;
       const username = document.querySelector('#username');
