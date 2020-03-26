@@ -16,33 +16,42 @@ NOTA = Para todos los casos el codigo 500 es un error interno. Es decir, del ser
         Cuando ocurra este error, sera almacenado en el LOG o enviado por MAIL al area de sistemas.
 
 LOGIN:
-    200 - login Correcto
-    201 - Contraseña vencida
-    401 - 'userName' no Existe
-    402 - 'password' invalido
-    403 - Usuario Deshabilitado
-    404 - Usuario Sin APP
+    200 - Login Correcto
+    201 - Contraseña Vencida
+    401 - Ingrese Usuario
+    402 - Ingrese Contraseña
+    403 - Usuario Incorrecto
+    404 - Contrseña Incorrecta
+    405 - Usuario Deshabilitado
 
-PASSWORD FORGET:
-    200 - Contraseña Enviada
-    401 - 'userName' no Existe
-    402 - 'dni' invalido
-    403 - Sin Supervisor
-    404 - Sin Informacion
-    405 - Supervisor No Encontrado
+FORGET_PASSWORD:
+    LIST_SUPERVISOR (Step 1):
+        200 - Lista Supervisores
+        401 - Ingrese Usuario
+        402 - Ingrese DNI
+        403 - Usuario Incorrecto
+        404 - DNI Incorrecto
 
-PASSWORD EXPIRED:
+    SEND_FORGET (Step 2):
+        200 - Contraseña Enviada
+        401 - Ingrese Usuario
+        402 - Ingrese DNI
+        403 - Seleccione un Supervisor
+        404 - Supervisor No Encontrado
+
+PASSWORD_EXPIRED:
     200 - Contraseña Modificada
-    401 - 'userName' no Existe
-    402 - 'password' no Existe
-    403 - 'newPassword' no Existe
-    404 - 'confirmPassword' no Existe
+    401 - Ingrese Usuario
+    402 - Ingrese Contraseña Actual
+    403 - Ingrese Nueva Contraseña
+    404 - Confirme Nueva Contraseña
     405 - Contraseña Insegura
-    406 - Contraseñas no Coinciden
+    406 - Contraseñas No Coinciden
 
 APP : 
-    200 - APP Ejecutada Correctamente
+    200 - APP Ejecutada
     201 - APP Actualizada
-    202 - APP No Instalada
-    401 - APP No Existe
-    401 - Sin Privilegios para esta APP
+    401 - APP No Instalada
+    402 - APP No Existe
+    403 - Sin Privilegios para esta APP
+    404 - APP En Uso

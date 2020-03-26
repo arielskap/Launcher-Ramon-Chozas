@@ -8,23 +8,23 @@ const fs = require('fs');
 ipcMain.on('open-app', (event, appName) => {
 
   if (!_LIST_APP_FOR_USER || _LIST_APP_FOR_USER.length < 1) {
-    return event.reply('reply-open-app', { code: 400, message: 'Usuario no logeado', appName });
+    return event.reply('reply-open-app', { code: 403, message: 'Sin Privilegios', appName });
   }
 
   const oneAPP = _LIST_APP_FOR_USER.find((rowAPP) => rowAPP.name === appName);
 
   if (!oneAPP) {
-    return event.reply('reply-open-app', { code: 400, type: 'local', message: 'Sin Privilegios', appName });
+    return event.reply('reply-open-app', { code: 403, type: 'local', message: 'Sin Privilegios', appName });
   }
 
   if (oneAPP.isRun === true) {
-    return event.reply('reply-open-app', { code: 400, type: 'local', message: 'APP en uso', appName });
+    return event.reply('reply-open-app', { code: 404, type: 'local', message: 'APP en uso', appName });
   }
 
   try {
 
     if (!fs.existsSync(oneAPP.path)) {
-      return event.reply('reply-open-app', { code: 400, type: 'local', message: 'APP no instalada', appName });
+      return event.reply('reply-open-app', { code: 401, type: 'local', message: 'APP no instalada', appName });
     }
 
     const ls = child.spawn(`${oneAPP.path}/${oneAPP.exe}`);
@@ -46,7 +46,7 @@ ipcMain.on('open-app', (event, appName) => {
       }
     });
 
-    return event.reply('reply-open-app', { code: 200, type: 'local', message: 'APP Abierta', appName });
+    return event.reply('reply-open-app', { code: 200, type: 'local', message: 'APP Ejecutada', appName });
 
   } catch (error) {
     console.error(`ERROR PETICION = 

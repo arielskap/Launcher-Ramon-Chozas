@@ -17,6 +17,8 @@ const _PATH_EXPIRED_ = '/node/build/expired';
  */
 ipcMain.on('login-launcher', (event, argsJSON) => {
 
+  _LIST_APP_FOR_USER = [];
+
   if (!argsJSON.userName || argsJSON.userName === undefined) {
     return event.reply('reply-login-launcher', { code: 401, type: 'local', message: 'Ingrese Usuario' });
   }
@@ -37,16 +39,15 @@ ipcMain.on('login-launcher', (event, argsJSON) => {
     },
   };
 
-  requestPOST(postData, options, async (parsedData, error) => {
+  requestPOST(postData, options, async (error, parsedData) => {
 
     if (error) {
       console.error(`ERROR PETICION = ${error}`);
-      event.reply('reply-login-launcher', { code: 500, message: 'Error Server.' });
+      event.reply('reply-login-launcher', { code: 500, message: 'Error Servidor.' });
       return 0;
     }
 
     if (!parsedData.list_app || parsedData.list_app.length < 1) {
-      console.error(`ERROR PETICION = ${error}`);
       event.reply('reply-login-launcher', { code: parsedData.code, message: parsedData.message, user: parsedData.user, list_app: null });
       return 1;
     }
@@ -64,11 +65,11 @@ ipcMain.on('login-launcher', (event, argsJSON) => {
  */
 ipcMain.on('list-supervisor', (event, argsJSON) => {
   if (!argsJSON.userName || !argsJSON.userName === '') {
-    return event.reply('reply-list-supervisor', { code: 400, type: 'local', message: 'Ingrese Usuario', body: 'userName-dni' });
+    return event.reply('reply-list-supervisor', { code: 401, type: 'local', message: 'Ingrese Usuario', body: 'userName-dni' });
   }
 
   if (!argsJSON.dni || !argsJSON.dni < 0) {
-    return event.reply('reply-list-supervisor', { code: 400, type: 'local', message: 'Ingrese DNI', body: 'userName-dni' });
+    return event.reply('reply-list-supervisor', { code: 402, type: 'local', message: 'Ingrese DNI', body: 'userName-dni' });
   }
 
   const postData = querystring.stringify({ userName: argsJSON.userName, dni: argsJSON.dni, user_windows: os.userInfo().username });
@@ -83,7 +84,7 @@ ipcMain.on('list-supervisor', (event, argsJSON) => {
     },
   };
 
-  requestPOST(postData, options, (parsedData, error) => {
+  requestPOST(postData, options, (error, parsedData) => {
 
     if (error) {
       console.error(`ERROR PETICION = 
@@ -114,11 +115,8 @@ ipcMain.on('forget-password', (event, argsJSON) => {
   if (!argsJSON.supervisor || argsJSON.supervisor.length < 1) {
     return event.reply('reply-forget-password', { code: 403, type: 'local', message: 'Seleccione un Supervisor', body: 'userName-dni-supervisor' });
   }
-  if (!_LIST_SUPERVISOR_FOR_USER || _LIST_SUPERVISOR_FOR_USER.length < 1) {
-    return event.reply('reply-forget-password', { code: 404, type: 'local', message: 'Sin Informacion' });
-  }
   if (!_LIST_SUPERVISOR_FOR_USER.find((rowSupervisor) => rowSupervisor === argsJSON.supervisor)) {
-    return event.reply('reply-forget-password', { code: 405, type: 'local', message: 'Supervisor no encontrado' });
+    return event.reply('reply-forget-password', { code: 404, type: 'local', message: 'Supervisor no encontrado' });
   }
 
   const postData = querystring.stringify({ userName: argsJSON.userName, dni: argsJSON.dni, supervisor: argsJSON.supervisor, user_windows: os.userInfo().username });
@@ -133,7 +131,7 @@ ipcMain.on('forget-password', (event, argsJSON) => {
     },
   };
 
-  requestPOST(postData, options, (parsedData, error) => {
+  requestPOST(postData, options, (error, parsedData) => {
 
     if (error) {
       console.error(`ERROR PETICION = 
@@ -193,7 +191,7 @@ ipcMain.on('expired-password', (event, argsJSON) => {
     },
   };
 
-  requestPOST(postData, options, (parsedData, error) => {
+  requestPOST(postData, options, (error, parsedData) => {
 
     if (error) {
       console.error(`ERROR PETICION = 

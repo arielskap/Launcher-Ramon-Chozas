@@ -18,7 +18,7 @@ function getZIPServer(appName, pathFileZIP, nameFileZIP) {
       },
     };
 
-    requestGETFile(`${pathFileZIP}/${nameFileZIP}`, options, (resultRequest, error) => {
+    requestGETFile(`${pathFileZIP}/${nameFileZIP}`, options, (error, resultRequest) => {
       if (error) {
         console.error(`ERROR PETICION = ${error}`);
         // eslint-disable-next-line prefer-promise-reject-errors
@@ -76,17 +76,17 @@ function descompressZIP(pathFile) {
   });
 }
 
-function validVersion(appPath, appExe, versionServer) {
+function validVersionZIP(pathZIP, nameZIP, versionServer) {
 
-  const app = `${appPath}/${appExe}`;
+  const fullPathZIP = `${pathZIP}/${nameZIP}`;
 
-  if (!fs.existsSync(appPath) || !fs.existsSync(app)) {
+  if (!fs.existsSync(pathZIP) || !fs.existsSync(fullPathZIP)) {
     return { code: 400, message: 'APP No Instalada', body: true };
   }
 
   return new Promise((resolve, reject) => {
     const hash = crypto.createHash('md5');
-    const stream = fs.createReadStream(app);
+    const stream = fs.createReadStream(fullPathZIP);
     stream.on('error', (err) => reject(err));
     stream.on('data', (chunk) => hash.update(chunk));
     stream.on('end', () => resolve(hash.digest('hex')));
@@ -101,7 +101,7 @@ function validVersion(appPath, appExe, versionServer) {
 
 async function checkAPP(app) {
 
-  const resultValidVersion = await validVersion(app.path, app.exe, app.hashServidor);
+  const resultValidVersion = await validVersionZIP(app.path, app.zip, app.hashServidor);
 
   if (resultValidVersion.code !== 200) {
     return {
