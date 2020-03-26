@@ -2,16 +2,15 @@
 
 ## Electron
 
-1. Los eventos estan divididos en archivos : Login y Home
+1. Los eventos estan divididos en archivos : eventsLogin y eventsHome
     - En LOGIN estan todas las eventos que se realizan cuando el usuario no esta logeado
     - En HOME estan todos los eventos cuando el usuario esta logeado
 
-2. Todos los eventos emitiran un eventos de respuesta (reply)
+2. Todos los eventos recibidos en "main" emitiran un evento de respuesta(reply) al "renderer".
 
-3. Para ejecutar solo Electron en modo desarrollo, ejecutar "npm run dev".
+3. Para ejecutar **SOLO** Electron en modo DESAROLLO, ejecutar "npm run dev".
 
-#### Codigos de Respuesta (Tanto Electron como Server)
--
+#### Codigos de Respuesta (Electron y Servidor)
 
 *NOTA = Para todos los casos, el codigo 500 es un error interno. Es decir, del servidor, mal response, mal request, error en db, otros. Cuando ocurra este error, sera almacenado en el LOG o enviado por MAIL al area de sistemas.*
 
