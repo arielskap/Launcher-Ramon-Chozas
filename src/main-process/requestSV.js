@@ -21,16 +21,16 @@ function requestPOST(postData, options, callback) {
     res.on('end', () => {
       try {
         const parsedData = JSON.parse(dataWS);
-        callback(parsedData, null);
+        callback(null, parsedData);
       } catch (e) {
-        callback(null, e.message);
+        callback(e.message, null);
       }
     });
 
   });
 
   req.on('error', (e) => {
-    callback(null, e.message);
+    callback(e.message, null);
   });
 
   req.write(postData);
@@ -56,16 +56,16 @@ function requestGET(options, callback) {
     res.on('end', () => {
       try {
         const parsedData = JSON.parse(dataWS);
-        callback(parsedData, null);
+        callback(null, parsedData);
       } catch (e) {
-        callback(null, e.message);
+        callback(e.message, null);
       }
     });
 
   });
 
   req.on('error', (e) => {
-    callback(null, e.message);
+    callback(e.message, null);
   });
   req.end();
 }
@@ -89,14 +89,18 @@ function requestGETFile(pathCreateFile, options, callback) {
 
     res.on('end', () => {
       content = Buffer.concat(bufs, size);
-      fs.writeFileSync(pathCreateFile, content);
-      callback(true, null);
+      fs.writeFile(pathCreateFile, content, (err) => {
+        if (err) {
+          callback(e.message, null);
+        }
+        callback(null, true);
+      });
     });
 
   });
 
   req.on('error', (e) => {
-    callback(null, e.message);
+    callback(e.message, null);
   });
   req.end();
 }
