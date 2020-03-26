@@ -68,6 +68,7 @@ const FormContainer = () => {
       const listApp = argsJSON.list_app;
       const username = document.querySelector('#username');
       const password = document.querySelector('#password');
+      console.table(argsJSON);
       if (user) {
         const { firstName, lastName } = user;
         const usuario = { firstName, lastName, listApp };

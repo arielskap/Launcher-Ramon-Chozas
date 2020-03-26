@@ -56,6 +56,7 @@ const NuevaPass = () => {
 
   useEffect(() => {
     ipcRenderer.on('reply-expired-password', (event, argsJSON) => {
+      console.table(argsJSON);
       document.getElementById('username').focus();
       const { message, code } = argsJSON;
       const username = document.querySelector('#username');
@@ -96,7 +97,7 @@ const NuevaPass = () => {
         </div>
         <Input handleChange={handleChange} id='username' placeholder='Ingresar Usuario' type='text'>Usuario:</Input>
         <Input handleChange={handleChange} id='password' placeholder='Ingrese contraseña actual' type='password'>Contraseña Actual:</Input>
-        <Input handleChange={handleChange} id='newPassword' placeholder='Ingrese nueva contraseña' type='password'>Nueva Contraseña:</Input>
+        <Input handleChange={handleChange} id='newPassword' placeholder='Ingrese nueva contraseña' type='password' textBottom='Debe incluir minimo un número, una mayuscula, un caracter especial y debe tener minimo 8 caracteres.'>Nueva Contraseña:</Input>
         <Input handleChange={handleChange} id='confirmNewPassword' placeholder='Confirmar nueva contraseña' type='password'>Confirme Nueva Contraseña:</Input>
         <div className='div_information text-center text-red-500 text-xs my-4'>
           <p className='p_information'>{information}</p>
