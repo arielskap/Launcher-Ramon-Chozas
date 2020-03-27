@@ -165,7 +165,9 @@ ipcMain.on('expired-password', (event, argsJSON) => {
     return event.reply('reply-expired-password', { code: 404, type: 'local', message: 'Ingrese la Confirmacion de contraseña', body: 'username-password-newPassword-confirmPassword' });
   }
 
-  if (argsJSON.newPassword.length < 4) {
+  const regex = new RegExp(/^(?=.*\d)(?=.*[a-záéíóúüñ]).*[A-ZÁÉÍÓÚÜÑ]/, 'g');
+
+  if (argsJSON.newPassword.length < 6 || regex.test(argsJSON.newPassword) === false) {
     return event.reply('reply-expired-password', { code: 405, type: 'local', message: 'Contraseña Insegura' });
   }
 

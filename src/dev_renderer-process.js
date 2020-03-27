@@ -27,6 +27,10 @@ function expired() {
   ipcRenderer.send('expired-password', { userName: input_userNameExpired.value, password: input_passwordExpired.value, newPassword: input_newPasswordExpired.value, confirmPassword: input_confirmPasswordExpired.value });
 };
 
+function install(btnElement) {
+  ipcRenderer.send('install-app', btnElement.id);
+};
+
 ipcRenderer.on('reply-login-launcher', (event, argsJSON) => {
   console.log(argsJSON);
 });
@@ -52,5 +56,9 @@ ipcRenderer.on('reply-expired-password', (event, argsJSON) => {
 });
 
 ipcRenderer.on('reply-list-supervisor', (event, argsJSON) => {
+  console.log(argsJSON);
+});
+
+ipcRenderer.on('reply-install-app', (event, argsJSON) => {
   console.log(argsJSON);
 });

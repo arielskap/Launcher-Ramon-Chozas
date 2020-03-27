@@ -52,6 +52,7 @@
   },
   "scripts": {
     "dev": "env NODE_ENV=dev electron src/main.js",
+    "dev_w": "SET NODE_ENV=dev&& electron src/main.js",
     "electron": "webpack --mode production && electron src/main.js",
     "build": "webpack --mode production",
     "start": "webpack-dev-server --open --mode development"

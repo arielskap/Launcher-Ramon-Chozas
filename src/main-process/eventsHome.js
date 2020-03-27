@@ -72,9 +72,21 @@ ipcMain.on('logout-launcher', (event) => {
  * EVENT
  * Redefine la lista de APP por usuario cuando cierra la sesion.
  */
-ipcMain.on('install-app', (event) => {
+ipcMain.on('install-app', (event, appName) => {
+
+  if (!_LIST_APP_FOR_USER || _LIST_APP_FOR_USER.length < 1) {
+    return event.reply('reply-install-app', { code: 403, message: 'Sin Privilegios', appName });
+  }
+
+  const oneAPP = _LIST_APP_FOR_USER.find((rowAPP) => rowAPP.name === appName);
+
+  if (!oneAPP) {
+    return event.reply('reply-install-app', { code: 403, type: 'local', message: 'Sin Privilegios', appName });
+  }
+
   return event.reply('reply-install-app', {
     code: 200,
     message: 'Instalada',
+    app: appName,
   });
 });
