@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Card from './Card';
-import '../assets/styles/Table.scss';
+import '../assets/styles/table.css';
 import first from '../assets/static/1.png';
 import second from '../assets/static/2.png';
 import third from '../assets/static/3.png';

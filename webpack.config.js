@@ -1,9 +1,22 @@
 const path = require('path');
+const glob = require('glob');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PurgecssPlugin = require('purgecss-webpack-plugin');
+
+const postcssPresetEnv = require('postcss-preset-env');
 const tailwindcss = require('tailwindcss');
 const autoprefixer = require('autoprefixer');
+const postcssImport = require('postcss-import');
+const stylelint = require('stylelint');
+const postcssFontMagician = require('postcss-font-magician');
+const cssMqpacker = require('css-mqpacker');
+const ccsnano = require('cssnano');
 const fs = require('fs');
+
+const PATHS = {
+  src: path.join(__dirname, 'src'),
+};
 
 const nodeModules = {};
 fs.readdirSync('node_modules')
@@ -42,20 +55,43 @@ module.exports = {
         ],
       },
       {
-        test: /\.(s*)css$/,
+        test: /\.css$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
           },
           'css-loader',
-          'sass-loader',
           {
             loader: 'postcss-loader',
             options: {
               ident: 'postcss',
               plugins: [
-                tailwindcss,
+                postcssImport({
+                  plugins: [
+                    stylelint,
+                  ],
+                }),
+                postcssFontMagician({
+                  variants: {
+                    'Lato': {
+                      '300': [],
+                      '400': [],
+                      '700': [],
+                    },
+                    'Muli': {
+                      '300': [],
+                      '400': [],
+                      '700': [],
+                    },
+                  },
+                }),
+                postcssPresetEnv({
+                  stage: 0,
+                }),
                 autoprefixer,
+                tailwindcss,
+                cssMqpacker,
+                ccsnano,
               ],
             },
           },
@@ -92,6 +128,10 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].css',
+    }),
+    new PurgecssPlugin({
+      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+      defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
     }),
   ],
 };

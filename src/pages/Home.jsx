@@ -5,7 +5,7 @@ import ButtonMenu from '../components/ButtonMenu';
 import TableCarousel from '../components/TableCarousel';
 import ExitModal from '../components/ExitModal';
 import { logout, openAPP } from '../renderer-process';
-import '../assets/styles/Home.scss';
+import '../assets/styles/home.css';
 import logoChozas from '../assets/static/logo_chozas2.png';
 import imgPerfil from '../assets/static/thrall.jpg';
 import animateCSS from '../funciones';

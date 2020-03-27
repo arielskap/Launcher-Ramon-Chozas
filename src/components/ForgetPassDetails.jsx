@@ -3,9 +3,10 @@ import Tippy from '@tippyjs/react';
 import Form from './Form';
 import BackToLogin from './BackToLogin';
 import InformationModal from './InformationModal';
-import '../assets/styles/ForgetPass.scss';
-import info from '../assets/static/info.svg';
 import Input from './Input';
+import '../assets/styles/forgetPass.css';
+//import '../assets/styles/tippy.css';
+import info from '../assets/static/info.svg';
 import 'tippy.js/dist/tippy.css';
 
 /*onChange={handleChange}*/

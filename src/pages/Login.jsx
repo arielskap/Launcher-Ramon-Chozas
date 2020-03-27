@@ -4,7 +4,7 @@ import FormContainer from '../components/FormContainer';
 import NuevaPass from '../components/NuevaPass';
 import ForgetPass from '../components/ForgetPassContainer';
 import Logo from '../assets/static/logo_chozas2.png';
-import '../assets/styles/Login.scss';
+import '../assets/styles/login.css';
 
 const Home = () => {
   const handleCloseApp = () => {

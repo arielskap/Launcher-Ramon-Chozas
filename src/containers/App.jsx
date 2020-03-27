@@ -2,7 +2,9 @@ import React from 'react';
 import { HashRouter, Switch, Route, Redirect } from 'react-router-dom';
 import Login from '../pages/Login';
 import Home from '../pages/Home';
-import '../assets/styles/App.scss';
+import '../assets/styles/app.css';
+import '../assets/styles/tailwind.css';
+import 'animate.css/animate.min.css';
 
 const App = () => {
   return (

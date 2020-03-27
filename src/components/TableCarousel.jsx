@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import Swiper from 'swiper';
 import Card from './Card';
-import '../assets/styles/TableCarousel.scss';
+import '../assets/styles/tableCarousel.css';
+import 'swiper/css/swiper.css';
 import json from '../jsons/table.json';
 import first from '../assets/static/1.png';
 import second from '../assets/static/2.png';
