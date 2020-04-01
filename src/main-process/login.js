@@ -106,6 +106,7 @@ async function checkAPP(app) {
   if (resultValidVersion.code !== 200) {
     return {
       name: app.name,
+      alias: app.alias,
       path: app.path,
       exe: app.exe,
       message: resultValidVersion.message,
@@ -116,6 +117,7 @@ async function checkAPP(app) {
   if (resultValidVersion.body) {
     return {
       name: app.name,
+      alias: app.alias,
       path: app.path,
       exe: app.exe,
       message: resultValidVersion.message,
@@ -128,6 +130,7 @@ async function checkAPP(app) {
   if (resultGetZIP.code === 500) {
     return {
       name: app.name,
+      alias: app.alias,
       path: app.path,
       exe: app.exe,
       message: resultGetZIP.message,
@@ -139,6 +142,7 @@ async function checkAPP(app) {
 
   return {
     name: app.name,
+    alias: app.alias,
     path: app.path,
     exe: app.exe,
     message: resultDescompressZIP.message,
