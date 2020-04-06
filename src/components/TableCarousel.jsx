@@ -35,7 +35,7 @@ const TableCarousel = () => {
     });
   }, []);
   return (
-    <div className='div_table border-2 border-teal-500 shadow-2xl'>
+    <div className='div_table border-2 border-teal-500 shadow-2xl rounded'>
       <div className='swiper-container'>
         <div className='swiper-wrapper'>
           {json.map((element) => {

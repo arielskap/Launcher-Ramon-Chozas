@@ -63,7 +63,7 @@ const FormContainer = () => {
   };
   useEffect(() => {
     document.getElementById('username').focus();
-    ipcRenderer.on('reply-login-launcher', (event, argsJSON) => {
+    ipcRenderer.once('reply-login-launcher', (event, argsJSON) => {
       const { message, code, user } = argsJSON;
       const listApp = argsJSON.list_app;
       const username = document.querySelector('#username');

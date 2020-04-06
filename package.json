@@ -53,9 +53,9 @@
   "scripts": {
     "dev": "env NODE_ENV=dev electron src/main.js",
     "dev_w": "SET NODE_ENV=dev&& electron src/main.js",
-    "electron": "webpack --mode production && electron src/main.js",
-    "build": "webpack --mode production",
-    "start": "webpack-dev-server --open --mode development"
+    "devElectron": "rm -rf dist && webpack --mode development && electron src/main.js",
+    "electron": "electron src/main.js",
+    "build": "rm -rf dist && webpack --mode production"
   },
   "repository": {
     "type": "git",

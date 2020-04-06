@@ -34,6 +34,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
   },
+  target: 'electron-main',
+  devtool: 'source-map',
   resolve: {
     extensions: ['.js', '.jsx', '.ts'],
   },
@@ -129,9 +131,9 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
-    new PurgecssPlugin({
-      paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
-      defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
-    }),
+    //new PurgecssPlugin({
+    //  paths: glob.sync(`${PATHS.src}/**/*`, { nodir: true }),
+    //  defaultExtractor: (content) => content.match(/[\w-/:]+(?<!:)/g) || [],
+    //}),
   ],
 };

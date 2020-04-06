@@ -2,11 +2,15 @@
 import React, { useState, useEffect } from 'react';
 import animateCSS from '../funciones';
 import ForgetPassDetails from './ForgetPassDetails';
+import { listSupervisor } from '../renderer-process';
 
 const ForgetPassContainer = () => {
 
   const handleChange = () => {
-    if (document.querySelector('#username').value && document.querySelector('#dni').value) {
+    const userName = document.querySelector('#username').value;
+    const dni = document.querySelector('#dni').value;
+    if (userName && dni) {
+      listSupervisor({ userName, dni });
       document.querySelector('#btnForm').classList.remove('opacity-50', 'cursor-not-allowed');
       document.querySelector('#btnForm').removeAttribute('disabled');
     } else {

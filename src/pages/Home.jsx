@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { ipcRenderer } from 'electron';
 import ButtonMenu from '../components/ButtonMenu';
 import TableCarousel from '../components/TableCarousel';
 import ExitModal from '../components/ExitModal';
-import { logout, openAPP } from '../renderer-process';
+import { logout, openAPP, install } from '../renderer-process';
 import '../assets/styles/home.css';
 import logoChozas from '../assets/static/logo_chozas2.png';
 import imgPerfil from '../assets/static/thrall.jpg';
@@ -14,6 +14,7 @@ const Home = () => {
   const [modalExitIsOpen, setModalExitIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const history = useHistory();
+  const elementDOM = useRef('');
 
   const handleCloseModal = () => {
     animateCSS('.Modal__container', 'slideOutUp faster', () => {
@@ -42,6 +43,7 @@ const Home = () => {
 
   const handleOpenApp = (element, aplication) => {
     const queryElement = document.querySelector(`.${element}`);
+    elementDOM.current = document.querySelector(`.${element}`);
     openAPP(aplication);
     queryElement.setAttribute('disabled', '');
     queryElement.classList.add('bg-blue-500', 'text-white', 'border-transparent');
@@ -51,21 +53,24 @@ const Home = () => {
   };
 
   useEffect(() => {
-    ipcRenderer.on('reply-open-app', (event, argsJSON) => {
-      console.table(argsJSON);
+    ipcRenderer.once('reply-open-app', (event, argsJSON) => {
+      console.log(argsJSON);
       document.body.classList.remove('cursor-wait');
     });
 
-    ipcRenderer.on('reply-close-app', (event, argsJSON) => {
-      console.table(argsJSON);
-      queryElement.removeAttribute('disabled');
-      queryElement.classList.add('bg-transparent', 'text-white-700', 'border-blue-500');
-      queryElement.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
+    ipcRenderer.once('reply-close-app', (event, argsJSON) => {
+      console.log(argsJSON);
+      elementDOM.current.removeAttribute('disabled');
+      elementDOM.current.classList.add('bg-transparent', 'text-white-700', 'border-blue-500');
+      elementDOM.current.classList.remove('bg-blue-500', 'text-white', 'border-transparent');
+    });
+
+    ipcRenderer.once('reply-install-app', (event, argsJSON) => {
+      console.log(argsJSON);
     });
   }, []);
 
   const { firstName, lastName, listApp } = JSON.parse(localStorage.getItem('user'));
-  console.log(listApp);
   return (
     <section className='Home p-4 h-full w-full flex flex-col animated fadeIn text-white'>
       <div className='Home__header flex items-center justify-between'>
@@ -89,7 +94,7 @@ const Home = () => {
           <div className='flex flex-col justify-between text-xl'>
             <div className='flex justify-center flex-col px-12'>
               {listApp.map((app, index) => {
-                const { name, path } = app;
+                const { name, alias, status } = app;
                 const id = index;
                 const className = `button__${name}`;
                 return (
@@ -97,10 +102,10 @@ const Home = () => {
                     <ButtonMenu
                       className={className}
                       onClick={() => {
-                        handleOpenApp(className, path);
+                        handleOpenApp(className, name);
                       }}
                     >
-                      {name}
+                      {alias}
                     </ButtonMenu>
                   </div>
                 );

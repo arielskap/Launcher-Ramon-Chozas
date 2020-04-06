@@ -13,14 +13,18 @@ export const logout = () => {
   ipcRenderer.send('logout-launcher');
 };
 
+function install(btnElement) {
+  ipcRenderer.send('install-app', btnElement.id);
+};
+
 // PASO 1
-export function listSupervisor() {
-  ipcRenderer.send('list-supervisor', { userName: input_userNameListSupervisor.value, dni: input_dniListSupervisor.value });
+export function listSupervisor(object, callback) {
+  ipcRenderer.invoke('list-supervisor', object, callback);
 };
 
 // PASO 2
-export function forget() {
-  ipcRenderer.send('forget-password', { userName: input_userNameForget.value, dni: input_dniForget.value, supervisor: input_supervisorForget.value });
+export function forget(object, callback) {
+  ipcRenderer.invoke('forget-password', { userName: input_userNameForget.value, dni: input_dniForget.value, supervisor: input_supervisorForget.value }, callback);
 };
 
 export function expired() {
